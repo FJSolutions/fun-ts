@@ -1,0 +1,19 @@
+{
+	"name": "fun-ts",
+	"version": "0.1.0",
+	"author": {
+		"name": "Francis Judge",
+		"email": "fjudge7@gmail.com"
+	},
+	"module": "src/index.ts",
+	"type": "module",
+	"private": true,
+	"devDependencies": {
+		"@biomejs/biome": "2.3.10",
+		"@types/bun": "latest",
+		"vitest": "^4.0.16"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	}
+}
