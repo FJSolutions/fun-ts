@@ -1,19 +1,17 @@
 {
-	"name": "fun-ts",
-	"version": "0.1.0",
-	"author": {
-		"name": "Francis Judge",
-		"email": "fjudge7@gmail.com"
-	},
-	"module": "src/index.ts",
-	"type": "module",
-	"private": true,
-	"devDependencies": {
-		"@biomejs/biome": "2.3.10",
-		"@types/bun": "latest",
-		"vitest": "^4.0.16"
-	},
-	"peerDependencies": {
-		"typescript": "^5"
-	}
+  "name": "fun-ts",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "Francis Judge <fjudge7@gmail.com>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.27.0",
+  "devDependencies": {
+    "vitest": "^4.1.1"
+  }
 }

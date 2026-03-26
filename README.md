@@ -1,15 +1,5 @@
 # fun-ts
 
-To install dependencies:
+A project to group all my functional programming experiments into one place.
 
-```bash
-bun install
-```
 
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
