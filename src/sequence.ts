@@ -269,17 +269,15 @@ export const tap = <T>(func: (item: T) => void) =>
 
             return {
                next: () => {
-                  while (true) {
-                     const result = iterator.next();
+                  const result = iterator.next();
 
-                     if (result.done) {
-                        return result;
-                     }
-
-                     func(result.value);
-
+                  if (result.done) {
                      return result;
                   }
+
+                  func(result.value);
+
+                  return result;
                },
             };
          },
