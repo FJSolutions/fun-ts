@@ -3,23 +3,39 @@ import * as Seq from "../src/sequence";
 
 describe("Sequence", () => {
    describe.skip("fold", () => {
+      //! TODO:
    })
 
    describe.skip("map", () => {
+      //! TODO:
    })
 
    describe.skip("filter", () => {
+      //! TODO:
    })
 
    describe.skip("flatMap", () => {
+      //! TODO:
    })
 
-   describe("take", () => {
+   describe("take & limit", () => {
       it('should take 3 from an array of 5', () => {
          const source = [1, 2, 3, 4, 5];
 
+         // const seq = Seq.take(3)(source)
          const seq = Seq.take(3)(source)
-         const arr = Seq.toList(seq)
+         const arr = seq.toList()
+
+         expect(arr.length).toBe(3)
+         expect(arr).toEqual([1, 2, 3])
+      });
+
+      it('should limit the results to 3 from an array of 5', () => {
+         const source = [1, 2, 3, 4, 5];
+
+         const arr =
+            Seq.limit(3, source)
+               .toList()
 
          expect(arr.length).toBe(3)
          expect(arr).toEqual([1, 2, 3])
@@ -46,12 +62,21 @@ describe("Sequence", () => {
       });
    })
 
-   describe("skip", () => {
+   describe("skip & offset", () => {
       it('should skip 3 from an array of 5', () => {
          const source = [1, 2, 3, 4, 5];
 
          const seq = Seq.skip(3)(source)
          const arr = Seq.toList(seq)
+
+         expect(arr.length).toBe(2)
+         expect(arr).toEqual([4, 5])
+      });
+
+      it('should offset 3 from an array of 5', () => {
+         const source = [1, 2, 3, 4, 5];
+
+         const arr = Seq.offset(3, source).toList()
 
          expect(arr.length).toBe(2)
          expect(arr).toEqual([4, 5])

@@ -1,6 +1,6 @@
 # fun-ts
 
-A personal project grouping the most Functional Programming types & functions I use regularly in one place.
+A personal project, grouping the most Functional Programming types & functions I use regularly in one place.
 
 The functions in this library prefer arrow functions because of their inability to change the `this` context.  
 
