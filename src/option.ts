@@ -3,18 +3,35 @@ const isNullOrUndefined = (value: unknown) => value === null || value === undefi
 /**
  * The type definition of an Option
  */
-export type Option<T> = { key: "Some", value: T } | { key: "None" }
+// export type Option<T> = { key: "Some", value: T } | { key: "None" }
+export interface Option<T> {
+   key: "Some" | "None",
+   value: T,
+   orElse: (defaultValue: T) => T,
+   match: <U>(none: () => U, some: (value: T) => U) => U,
+}
 
 /**
  * Creates an Option with some value
  * @param value The value in the option
  */
-export const some = <T>(value: T): Option<T> => ({key: "Some", value})
+export const some = <T>(value: T): Option<T> => ({
+   key: "Some",
+   value,
+   orElse: (_defaultValue: T) => value,
+   match: <U>(_none: () => U, some: (value: T) => U) => some(value),
+})
 
 /**
  * Creates an Option with no value
  */
-export const none = <T>(): Option<T> => ({key: "None"})
+export const none = <T>(): Option<T> => (
+   {
+      key: "None",
+      value: undefined as T,
+      orElse: (defaultValue: T) => defaultValue,
+      match: <U>(none: () => U, _some: (value: T) => U) => none(),
+   })
 
 /**
  * Creates an Option of a value
@@ -23,16 +40,16 @@ export const none = <T>(): Option<T> => ({key: "None"})
 export const of = <T>(value: T | undefined | null): Option<T> => isNullOrUndefined(value) ? none() : some(value)
 
 /**
- * Checks if an Option is some
+ * Checks if an Option is Some
  * @param option The option to check
  */
-export const isSome = <T>(option: Option<T>): option is { key: "Some", value: T } => option.key === "Some"
+export const isSome = <T>(option: Option<T>): boolean => option.key === "Some"
 
 /**
- * Checks if an Option is none
+ * Checks if an Option is None
  * @param option The option to check
  */
-export const isNone = <T>(option: Option<T>): option is { key: "None" } => option.key === "None"
+export const isNone = <T>(option: Option<T>): boolean => option.key === "None"
 
 /**
  * Unwraps an Option safely returning either the value, if there is some, or the supplied default value.
@@ -231,7 +248,7 @@ export function pipe<A, B, C, D, E, F, G, H, I, J>(
    func7?: (value: Option<G>) => Option<H>,
    func8?: (value: Option<H>) => Option<I>,
    func9?: (value: Option<I>) => Option<J>,
-): Option<B | C | D | E | F | G | H | I | J> {
+) {
    if (func9 && func8 && func7 && func6 && func5 && func4 && func3 && func2)
       return func9(func8(func7(func6(func5(func4(func3(func2(func1(option)))))))));
    if (func8 && func7 && func6 && func5 && func4 && func3 && func2)
@@ -242,8 +259,11 @@ export function pipe<A, B, C, D, E, F, G, H, I, J>(
       return func6(func5(func4(func3(func2(func1(option))))));
    if (func5 && func4 && func3 && func2)
       return func5(func4(func3(func2(func1(option)))));
-   if (func4 && func3 && func2) return func4(func3(func2(func1(option))));
-   if (func3 && func2) return func3(func2(func1(option)));
-   if (func2) return func2(func1(option));
+   if (func4 && func3 && func2)
+      return func4(func3(func2(func1(option))));
+   if (func3 && func2)
+      return func3(func2(func1(option)));
+   if (func2)
+      return func2(func1(option));
    return func1(option);
 }

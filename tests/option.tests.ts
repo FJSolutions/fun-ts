@@ -28,11 +28,12 @@ describe("Option", () => {
    })
 
    it("should match an option with a value", () => {
-      const option = O.some(1)
-      const result = O.match(
-         () => "None",
-         (value) => `Some(${value})`,
-      )(option)
+      const result =
+         O.some(1)
+            .match(
+               () => "None",
+               (value) => `Some(${value})`,
+            )
       expect(result).toEqual("Some(1)")
    })
 
@@ -51,7 +52,7 @@ describe("Option", () => {
    })
 
    it("should return a value from a none option", () => {
-      const option = O.orElse(2)(O.none())
+      const option = O.none().orElse(2)
       expect(option).toEqual(2)
    })
 
@@ -62,5 +63,15 @@ describe("Option", () => {
       )
       const res2 = O.orElse(3)(res1)
       expect(res2).toEqual(2)
+   })
+
+   it("should return a piped value from none", () => {
+      const res1 = O.pipe(
+         O.none<number>(),
+         O.lift((value) => value + 1),
+         O.lift((value) => value.toString())
+      )
+      const res2 = O.orElse("3")(res1)
+      expect(res2).toEqual("3")
    })
 })
