@@ -1,5 +1,6 @@
 export { pipe } from "./pipe";
-export { fold } from "./sequence";
+export * from "./sequence";
+export * from "./option"
 
 /**
  * The `identity` function which returns its argument unchanged.
