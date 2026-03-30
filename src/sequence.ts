@@ -1,3 +1,9 @@
+// The current implementations are synchronous and lazy; an asynchronous version could easily be created
+
+// Creation/generation function(s).
+// fromIterable
+// fromGenerator (function)
+
 /**
  * Folds the values of an iterable into a single value using a folder function.
  * @param folder A function that folds the next value into the accumulator.
@@ -19,7 +25,7 @@ export const fold = <S, V>(folder: (acc: S, next: V) => S, accumulator: S) => {
 };
 
 /**
- * Transforms each element of an iterable using a mapper function.
+ * Maps each element of an iterable using a mapper function.
  * @param mapper A function that transforms each element.
  * @returns The same iterable with the elements transformed.
  */
@@ -53,9 +59,9 @@ export const map = <T, U>(mapper: (value: T) => U) => {
 };
 
 /**
- *
+ * Filters the elements of an iterable using a predicate function.
  * @param predicate A predicate function for filtering
- * @returns
+ * @returns A new iterable with the elements that pass the predicate
  */
 export const filter = <T>(predicate: (value: T) => boolean) => {
    return (input: Iterable<T>): Iterable<T> => {
@@ -83,6 +89,10 @@ export const filter = <T>(predicate: (value: T) => boolean) => {
    };
 };
 
+/**
+ * Flattens and Maps over an iterable input
+ * @param mapper The mapping function for each element
+ */
 export const flatMap = <T, U>(mapper: (value: T) => Iterable<U>) => {
    return (input: Iterable<T>): Iterable<U> => {
       if (typeof input[Symbol.iterator] !== "function") {
@@ -134,3 +144,83 @@ export const toList = <T>(input: Iterable<T>): T[] => {
 
    return list;
 };
+
+/**
+ * Takes the first `count` elements from the input sequence, or as many as the input sequence has elements.
+ * @param count The maximum number of elements to tak
+ */
+export const take = <T>(count: number) => {
+   return (input: Iterable<T>): Iterable<T> => {
+      if (typeof input[Symbol.iterator] !== "function") {
+         throw new Error("The input to `take` is not iterable");
+      }
+
+      return {
+         [Symbol.iterator]: () => {
+            const iterator = input[Symbol.iterator]();
+            let index = 0;
+
+            return {
+               next: () => {
+                  if (index >= count) {
+                     return {
+                        done: true,
+                        value: undefined,
+                     } as IteratorResult<T, any>
+                  }
+
+                  const result = iterator.next();
+
+                  if (result.done) {
+                     return result;
+                  }
+
+                  index += 1
+
+                  return {
+                     value: result.value,
+                     done: false,
+                  };
+               },
+            };
+         },
+      };
+   }
+}
+
+/**
+ * Skips the first `count` elements from the input sequence.
+ * @param count The number of elements to skip.
+ */
+export const skip = <T>(count: number) => {
+   return (input: Iterable<T>): Iterable<T> => {
+      if (typeof input[Symbol.iterator] !== "function") {
+         throw new Error("The input to `skip` is not iterable")
+      }
+
+      return {
+         [Symbol.iterator]: () => {
+            const iterator = input[Symbol.iterator]();
+            let index = 0;
+
+            return {
+               next: () => {
+                  while (true) {
+                     const result = iterator.next();
+
+                     if (result.done) {
+                        return result;
+                     }
+
+                     if (index >= count) {
+                        return result
+                     } else {
+                        index += 1
+                     }
+                  }
+               },
+            };
+         },
+      };
+   }
+}

@@ -1,5 +1,5 @@
 # fun-ts
 
-A project to group all my functional programming experiments into one place.
+A project to group all my Functional Programming functions into one place.
 
 
