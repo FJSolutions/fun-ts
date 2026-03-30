@@ -10,6 +10,7 @@ The functions in this library prefer arrow functions because of their inability 
 - [Option](#option)
 - [Sequence](#sequence)
 - [General](#general)
+- [String](#strings)
 
 ## Pipe
 
@@ -34,3 +35,11 @@ The identity function which simply returns its value without doing anything to i
 ```ts
 const id = <T>(x: T): T => x;
 ```
+
+## Strings
+
+A module for converting strings in a more functional way, including some convenience methods for casing.
+
+## Documentation
+
+[`fun-ts` documentation]

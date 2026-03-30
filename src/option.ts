@@ -1,4 +1,4 @@
-const isNullOrUndefined = (value: unknown) => value === null || value === undefined
+import { isNullOrUndefined } from "./utils.ts";
 
 /**
  * The type definition of an Option
