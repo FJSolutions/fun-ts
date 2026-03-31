@@ -29,6 +29,8 @@ There is no build script — `tsconfig.json` uses `noEmit: true` and TypeScript 
 - **`option.ts`** — `Option<T>` monad (`Some<T> | None<T>`). Key functions: `some`, `none`, `of` (from nullable), `isSome`/`isNone` guards, `lift` (elevates `A => B | null | undefined` to `Option<A> => Option<B>`), and a `pipe` function for chaining option transforms.
 
 - **`sequence.ts`** — Lazy `Seq<T>` iterable sequences. Operations (`map`, `filter`, `flatMap`, `take`/`limit`, `skip`/`offset`, `fold`, `tap`) are lazy until `.toList()` is called. Also has a `pipe` function for composing sequence operations.
+- 
+- **`result.ts`** — `Result<T>` monad (`Ok<T> | Failure`). Operations (`of`, `isOk`, `isFaulure`, `map`, `filter`, `flatMap`, `fold`, `match`) are lazy until `.toList()` is called. Also has a `pipe` function for composing sequence operations.
 
 - **`strings.ts`** — String case conversion utilities: `toPascal`, `toCamel`, `toSnake`, `toKebab`, `capitalise`, `toSentence`, `toUpper`, `toLower`. Relies on `Intl.Segmenter` for word splitting.
 

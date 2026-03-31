@@ -9,6 +9,7 @@ The functions in this library prefer arrow functions because of their inability 
 - [Pipe](#pipe)
 - [Option](#option)
 - [Sequence](#sequence)
+- [Result]()
 - [General](#general)
 - [String](#strings)
 
@@ -23,6 +24,10 @@ A data structure with related functions for handling optional values safely.
 ## Sequence
 
 A lazily iterated set of functions.
+
+## Result
+
+A data structure and related functions that represents the result of an operation that can fail with some kind of context information.
 
 ## General
 
