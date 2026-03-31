@@ -458,6 +458,7 @@ export function pipe<A, B, C, D, E, F, G, H, I, J>(
    func8?: ((seq: Seq<H>) => Seq<I>),
    func9?: ((seq: Seq<I>) => Seq<J>)
 ) {
+   //* TODO: Try redoing this function using untyped-varargs
    const seq = of(source)
    if (func9 && func8 && func7 && func6 && func5 && func4 && func3 && func2)
       return func9(func8(func7(func6(func5(func4(func3(func2(func1(seq)))))))))
