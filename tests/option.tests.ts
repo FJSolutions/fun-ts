@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as O from "../src/option.ts";
+import * as O from "../src/option";
 
 describe("Option", () => {
    it("should create an option with a value", () => {

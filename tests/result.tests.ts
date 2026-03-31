@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as R from "../src/result.ts";
+import * as R from "../src/result";
 
 describe("Result", () => {
    describe("ok", () => {

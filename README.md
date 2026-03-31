@@ -9,7 +9,7 @@ The functions in this library prefer arrow functions because of their inability 
 - [Pipe](#pipe)
 - [Option](#option)
 - [Sequence](#sequence)
-- [Result]()
+- [Result](#result)
 - [General](#general)
 - [String](#strings)
 
@@ -40,7 +40,6 @@ The identity function which simply returns its value without doing anything to i
 ```ts
 const id = <T>(x: T): T => x;
 ```
-
 ## Strings
 
 A module for converting strings in a more functional way, including some convenience methods for casing.

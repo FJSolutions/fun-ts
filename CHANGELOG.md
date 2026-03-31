@@ -18,7 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `map`, `filter`, `reduce`, `flatMap`, `take`/`limit`, `skip`/`offset` functions
 - Option
   - `Option` interface
-  - `of`, `some`, `none`, `isSome`, `isNone`, `orElse`, `lift` utility functions
+  - `of`, `some`, `none`, `isSome`, `isNone`, `orElse`, `lift`, `match` utility functions
+  - `match` & `pipe` functions
+- Result
+  - `Result` interface
+  - `of`, `ok`, `failure`, `isOk`, `isFailure`, `orElse`, `lift`, `match` utility functions
   - `match` & `pipe` functions
 - Strings
   - Case conversion methods

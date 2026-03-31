@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from "./utils.ts";
+import { isNullOrUndefined } from "./utils";
 
 /**
  * The type definition of an Option

@@ -1,4 +1,4 @@
-import { isNullOrUndefined, toIdentifierWordList, toWordList } from "./utils.ts";
+import { isNullOrUndefined, toIdentifierWordList, toWordList } from "./utils";
 
 /**
  * Converts the input to upper case
