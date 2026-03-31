@@ -446,35 +446,9 @@ export function pipe<A, B, C, D, E, F, G, H, I, J>(
    func8: ((seq: Seq<H>) => Seq<I>),
    func9: ((seq: Seq<I>) => Seq<J>),
 ): Seq<J>
-export function pipe<A, B, C, D, E, F, G, H, I, J>(
-   source: Iterable<A>,
-   func1: ((seq: Seq<A>) => Seq<B>),
-   func2?: ((seq: Seq<B>) => Seq<C>),
-   func3?: ((seq: Seq<C>) => Seq<D>),
-   func4?: ((seq: Seq<D>) => Seq<E>),
-   func5?: ((seq: Seq<E>) => Seq<F>),
-   func6?: ((seq: Seq<F>) => Seq<G>),
-   func7?: ((seq: Seq<G>) => Seq<H>),
-   func8?: ((seq: Seq<H>) => Seq<I>),
-   func9?: ((seq: Seq<I>) => Seq<J>)
+export function pipe(
+   source: Iterable<any>,
+   ...funcs: ((seq: Seq<any>) => Seq<any>)[]
 ) {
-   //* TODO: Try redoing this function using untyped-varargs
-   const seq = of(source)
-   if (func9 && func8 && func7 && func6 && func5 && func4 && func3 && func2)
-      return func9(func8(func7(func6(func5(func4(func3(func2(func1(seq)))))))))
-   if (func8 && func7 && func6 && func5 && func4 && func3 && func2)
-      return func8(func7(func6(func5(func4(func3(func2(func1(seq))))))))
-   if (func7 && func6 && func5 && func4 && func3 && func2)
-      return func7(func6(func5(func4(func3(func2(func1(seq)))))))
-   if (func6 && func5 && func4 && func3 && func2)
-      return func6(func5(func4(func3(func2(func1(seq))))))
-   if (func5 && func4 && func3 && func2)
-      return func5(func4(func3(func2(func1(seq)))))
-   if (func4 && func3 && func2)
-      return func4(func3(func2(func1(seq))))
-   if (func3 && func2)
-      return func3(func2(func1(seq)))
-   if (func2)
-      return func2(func1(seq))
-   return func1(seq)
+   return funcs.reduce((acc, func) => func(acc), of(source) as Seq<any>)
 }

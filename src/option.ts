@@ -83,7 +83,7 @@ export const lift = <A, B>(func: (value: A) => B | null | undefined) => (option:
  */
 export function pipe<A, B>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
+   func1: (value: Option<A>) => Option<B>,
 ): Option<B>
 /**
  * Pipes an Option value safely through a series of functions.
@@ -94,8 +94,8 @@ export function pipe<A, B>(
  */
 export function pipe<A, B, C>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>
 ): Option<C>;
 /**
  * Pipes an Option value safely through a series of functions.
@@ -107,9 +107,9 @@ export function pipe<A, B, C>(
  */
 export function pipe<A, B, C, D>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>,
+   func3: (value: Option<C>) => Option<D>
 ): Option<C>;
 /**
  * Pipes an Option value safely through a series of functions.
@@ -122,10 +122,10 @@ export function pipe<A, B, C, D>(
  */
 export function pipe<A, B, C, D, E>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>,
-   func4?: (value: Option<D>) => Option<E>
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>,
+   func3: (value: Option<C>) => Option<D>,
+   func4: (value: Option<D>) => Option<E>
 ): Option<E>;
 /**
  * Pipes an Option value safely through a series of functions.
@@ -139,11 +139,11 @@ export function pipe<A, B, C, D, E>(
  */
 export function pipe<A, B, C, D, E, F>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>,
-   func4?: (value: Option<D>) => Option<E>,
-   func5?: (value: Option<E>) => Option<F>
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>,
+   func3: (value: Option<C>) => Option<D>,
+   func4: (value: Option<D>) => Option<E>,
+   func5: (value: Option<E>) => Option<F>
 ): Option<F>;
 /**
  * Pipes an Option value safely through a series of functions.
@@ -158,12 +158,12 @@ export function pipe<A, B, C, D, E, F>(
  */
 export function pipe<A, B, C, D, E, F, G>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>,
-   func4?: (value: Option<D>) => Option<E>,
-   func5?: (value: Option<E>) => Option<F>,
-   func6?: (value: Option<F>) => Option<G>
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>,
+   func3: (value: Option<C>) => Option<D>,
+   func4: (value: Option<D>) => Option<E>,
+   func5: (value: Option<E>) => Option<F>,
+   func6: (value: Option<F>) => Option<G>
 ): Option<G>;
 /**
  * Pipes an Option value safely through a series of functions.
@@ -179,13 +179,13 @@ export function pipe<A, B, C, D, E, F, G>(
  */
 export function pipe<A, B, C, D, E, F, G, H>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>,
-   func4?: (value: Option<D>) => Option<E>,
-   func5?: (value: Option<E>) => Option<F>,
-   func6?: (value: Option<F>) => Option<G>,
-   func7?: (value: Option<G>) => Option<H>
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>,
+   func3: (value: Option<C>) => Option<D>,
+   func4: (value: Option<D>) => Option<E>,
+   func5: (value: Option<E>) => Option<F>,
+   func6: (value: Option<F>) => Option<G>,
+   func7: (value: Option<G>) => Option<H>
 ): Option<H>;
 /**
  * Pipes an Option value safely through a series of functions.
@@ -202,14 +202,14 @@ export function pipe<A, B, C, D, E, F, G, H>(
  */
 export function pipe<A, B, C, D, E, F, G, H, I>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>,
-   func4?: (value: Option<D>) => Option<E>,
-   func5?: (value: Option<E>) => Option<F>,
-   func6?: (value: Option<F>) => Option<G>,
-   func7?: (value: Option<G>) => Option<H>,
-   func8?: (value: Option<H>) => Option<I>
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>,
+   func3: (value: Option<C>) => Option<D>,
+   func4: (value: Option<D>) => Option<E>,
+   func5: (value: Option<E>) => Option<F>,
+   func6: (value: Option<F>) => Option<G>,
+   func7: (value: Option<G>) => Option<H>,
+   func8: (value: Option<H>) => Option<I>
 ): Option<I>;
 /**
  * Pipes an Option value safely through a series of functions.
@@ -227,43 +227,19 @@ export function pipe<A, B, C, D, E, F, G, H, I>(
  */
 export function pipe<A, B, C, D, E, F, G, H, I, J>(
    option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>,
-   func4?: (value: Option<D>) => Option<E>,
-   func5?: (value: Option<E>) => Option<F>,
-   func6?: (value: Option<F>) => Option<G>,
-   func7?: (value: Option<G>) => Option<H>,
-   func8?: (value: Option<H>) => Option<I>,
-   func9?: (value: Option<I>) => Option<J>,
+   func1: (value: Option<A>) => Option<B>,
+   func2: (value: Option<B>) => Option<C>,
+   func3: (value: Option<C>) => Option<D>,
+   func4: (value: Option<D>) => Option<E>,
+   func5: (value: Option<E>) => Option<F>,
+   func6: (value: Option<F>) => Option<G>,
+   func7: (value: Option<G>) => Option<H>,
+   func8: (value: Option<H>) => Option<I>,
+   func9: (value: Option<I>) => Option<J>,
 ): Option<J>
-export function pipe<A, B, C, D, E, F, G, H, I, J>(
-   option: Option<A>,
-   func1: (a: Option<A>) => Option<B>,
-   func2?: (value: Option<B>) => Option<C>,
-   func3?: (value: Option<C>) => Option<D>,
-   func4?: (value: Option<D>) => Option<E>,
-   func5?: (value: Option<E>) => Option<F>,
-   func6?: (value: Option<F>) => Option<G>,
-   func7?: (value: Option<G>) => Option<H>,
-   func8?: (value: Option<H>) => Option<I>,
-   func9?: (value: Option<I>) => Option<J>,
+export function pipe(
+   option: Option<any>,
+   ...funcs: ((value: Option<any>) => Option<any>)[]
 ) {
-   if (func9 && func8 && func7 && func6 && func5 && func4 && func3 && func2)
-      return func9(func8(func7(func6(func5(func4(func3(func2(func1(option)))))))));
-   if (func8 && func7 && func6 && func5 && func4 && func3 && func2)
-      return func8(func7(func6(func5(func4(func3(func2(func1(option))))))));
-   if (func7 && func6 && func5 && func4 && func3 && func2)
-      return func7(func6(func5(func4(func3(func2(func1(option)))))));
-   if (func6 && func5 && func4 && func3 && func2)
-      return func6(func5(func4(func3(func2(func1(option))))));
-   if (func5 && func4 && func3 && func2)
-      return func5(func4(func3(func2(func1(option)))));
-   if (func4 && func3 && func2)
-      return func4(func3(func2(func1(option))));
-   if (func3 && func2)
-      return func3(func2(func1(option)));
-   if (func2)
-      return func2(func1(option));
-   return func1(option);
+   return funcs.reduce((acc, func) => func(acc), option)
 }

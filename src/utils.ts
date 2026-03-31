@@ -1,5 +1,3 @@
-import { toLower } from "./strings.ts";
-
 /**
  * Checks is a supplied value is `null` or `undefined`, strictly (that is, not relying on truthy values).
  * @param value The value to check

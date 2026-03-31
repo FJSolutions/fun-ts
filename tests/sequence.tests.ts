@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import * as Seq from "../src/sequence";
-import { filter } from "../src/sequence";
+import { id } from "../src";
 
 describe("Sequence", () => {
    describe.skip("fold", () => {
@@ -21,7 +21,7 @@ describe("Sequence", () => {
       it("should filter out even numbers", () => {
          const source = [1, 2, 3, 4, 5, 6]
 
-         const seq = filter((item: number) => item % 2 === 0)(source)
+         const seq = Seq.filter((item: number) => item % 2 === 0)(source)
          const result = seq.toList()
 
          expect(result).toEqual([2, 4, 6])
@@ -30,7 +30,7 @@ describe("Sequence", () => {
       it("should filter out odd numbers", () => {
          const source = [1, 2, 3, 4, 5, 6]
 
-         const seq = filter((item: number) => item % 2 !== 0)(source)
+         const seq = Seq.filter((item: number) => item % 2 !== 0)(source)
          const result = seq.toList()
 
          expect(result).toEqual([1, 3, 5])
@@ -143,11 +143,11 @@ describe("sequence piping", () => {
 
       const seq = Seq.pipe(
          source,
-         Seq.map(n => n + 1)
-      )
-      const result = seq.toList()
-      // const result = Seq.map((i: number) => i + 1)(Seq.of(source)).toList()
+         Seq.map(n => n + 1),
+         Seq.map(n => n * 2),
+         id,
+      ).toList()
 
-      expect(result).toEqual([2, 3, 4, 5, 6])
+      expect(seq).toEqual([4, 6, 8, 10, 12])
    })
 })

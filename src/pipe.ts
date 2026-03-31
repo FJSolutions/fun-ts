@@ -6,7 +6,7 @@
  */
 export function pipe<A, B>(
    data: A,
-   func1: (a: A) => B,
+   func1: (value: A) => B,
 ): B
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -17,8 +17,8 @@ export function pipe<A, B>(
  */
 export function pipe<A, B, C>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
 ): C
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -30,9 +30,9 @@ export function pipe<A, B, C>(
  */
 export function pipe<A, B, C, D>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
+   func3: (value: C) => D,
 ): D
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -45,10 +45,10 @@ export function pipe<A, B, C, D>(
  */
 export function pipe<A, B, C, D, E>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
-   func4?: (value: D) => E,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
+   func3: (value: C) => D,
+   func4: (value: D) => E,
 ): E
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -62,11 +62,11 @@ export function pipe<A, B, C, D, E>(
  */
 export function pipe<A, B, C, D, E, F>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
-   func4?: (value: D) => E,
-   func5?: (value: E) => F,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
+   func3: (value: C) => D,
+   func4: (value: D) => E,
+   func5: (value: E) => F,
 ): F
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -81,12 +81,12 @@ export function pipe<A, B, C, D, E, F>(
  */
 export function pipe<A, B, C, D, E, F, G>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
-   func4?: (value: D) => E,
-   func5?: (value: E) => F,
-   func6?: (value: F) => G,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
+   func3: (value: C) => D,
+   func4: (value: D) => E,
+   func5: (value: E) => F,
+   func6: (value: F) => G,
 ): G
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -102,13 +102,13 @@ export function pipe<A, B, C, D, E, F, G>(
  */
 export function pipe<A, B, C, D, E, F, G, H>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
-   func4?: (value: D) => E,
-   func5?: (value: E) => F,
-   func6?: (value: F) => G,
-   func7?: (value: G) => H,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
+   func3: (value: C) => D,
+   func4: (value: D) => E,
+   func5: (value: E) => F,
+   func6: (value: F) => G,
+   func7: (value: G) => H,
 ): H
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -125,14 +125,14 @@ export function pipe<A, B, C, D, E, F, G, H>(
  */
 export function pipe<A, B, C, D, E, F, G, H, I>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
-   func4?: (value: D) => E,
-   func5?: (value: E) => F,
-   func6?: (value: F) => G,
-   func7?: (value: G) => H,
-   func8?: (value: H) => I,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
+   func3: (value: C) => D,
+   func4: (value: D) => E,
+   func5: (value: E) => F,
+   func6: (value: F) => G,
+   func7: (value: G) => H,
+   func8: (value: H) => I,
 ): I
 /**
  * Pipes a value through a series of functions and returns a result.
@@ -150,40 +150,19 @@ export function pipe<A, B, C, D, E, F, G, H, I>(
  */
 export function pipe<A, B, C, D, E, F, G, H, I, J>(
    data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
-   func4?: (value: D) => E,
-   func5?: (value: E) => F,
-   func6?: (value: F) => G,
-   func7?: (value: G) => H,
-   func8?: (value: H) => I,
-   func9?: (value: I) => J,
+   func1: (value: A) => B,
+   func2: (value: B) => C,
+   func3: (value: C) => D,
+   func4: (value: D) => E,
+   func5: (value: E) => F,
+   func6: (value: F) => G,
+   func7: (value: G) => H,
+   func8: (value: H) => I,
+   func9: (value: I) => J,
 ): J
-export function pipe<A, B, C, D, E, F, G, H, I, J>(
-   data: A,
-   func1: (a: A) => B,
-   func2?: (value: B) => C,
-   func3?: (value: C) => D,
-   func4?: (value: D) => E,
-   func5?: (value: E) => F,
-   func6?: (value: F) => G,
-   func7?: (value: G) => H,
-   func8?: (value: H) => I,
-   func9?: (value: I) => J,
-): A | B | C | D | E | F | G | H | I | J {
-   if (func2 && func3 && func4 && func5 && func6 && func7 && func8 && func9)
-      return func9(func8(func7(func6(func5(func4(func3(func2(func1(data)))))))));
-   if (func2 && func3 && func4 && func5 && func6 && func7 && func8)
-      return func8(func7(func6(func5(func4(func3(func2(func1(data))))))));
-   if (func2 && func3 && func4 && func5 && func6 && func7)
-      return func7(func6(func5(func4(func3(func2(func1(data)))))));
-   if (func2 && func3 && func4 && func5 && func6)
-      return func6(func5(func4(func3(func2(func1(data))))));
-   if (func2 && func3 && func4 && func5)
-      return func5(func4(func3(func2(func1(data)))));
-   if (func2 && func3 && func4) return func4(func3(func2(func1(data))));
-   if (func2 && func3) return func3(func2(func1(data)));
-   if (func2) return func2(func1(data));
-   return func1(data);
-};
+export function pipe(
+   data: any,
+   ...funcs: ((value: any) => any)[]
+) {
+   return funcs.reduce((acc, func) => func(acc), data)
+}

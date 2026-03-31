@@ -31,10 +31,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `toKebab`
     - `toSnake`
 
+### Changed
+
+- Update the way that the `pipe` functions implementation works in `option`, `pipe`, and `sequence`
+
 ## [0.1.0] - ???
 
 ### Added
 
-### Changed
 
 ### Removed
