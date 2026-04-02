@@ -1,22 +1,45 @@
-interface Ok<T> {
+import { none, type Option, some } from "./option.ts";
+
+interface ResultBase<T> {
+   toOption: () => Option<T>;
+}
+
+interface Ok<T> extends ResultBase<T> {
    key: "OK",
    value: T
 }
 
-interface Failure {
+interface Failure<T> extends ResultBase<T> {
    key: "Failure",
    message: string,
    error?: Error
 }
 
-export type Result<T> = Ok<T> | Failure;
+/**
+ * The public interface of the Result type
+ */
+export type Result<T> = Ok<T> | Failure<T>;
 
-export const ok = <T>(value: T): Result<T> => ({key: "OK", value})
+/**
+ * Creates an OK `Result<T>`
+ * @param value The OK value
+ */
+export const ok = <T>(value: T): Result<T> => ({
+   key: "OK",
+   value,
+   toOption: () => some(value),
+})
 
+/**
+ * Creates a failure `Result<T>`
+ * @param message The message to use to describe the failure
+ * @param error The Error (if any) that caused the failure
+ */
 export const failure = <T extends unknown>(message: string, error?: Error): Result<T> => ({
    key: "Failure",
    message,
-   error
+   error,
+   toOption: () => none()
 })
 
 /**
@@ -40,7 +63,7 @@ export const isOk = <T>(result: Result<T>): result is Ok<T> => result.key === "O
 /**
  * Checks if a Result is Failure
  */
-export const isFailure = <T>(result: Result<T>): result is Failure => result.key === "Failure"
+export const isFailure = <T>(result: Result<T>): result is Failure<T> => result.key === "Failure"
 
 /**
  * Transforms the value inside an Ok result. Passes Failure through unchanged.
@@ -50,7 +73,7 @@ export const map = <T, U>(func: (value: T) => U) => (result: Result<T>): Result<
    if (isOk(result)) {
       return ok(func(result.value))
    }
-   return result
+   return failure<U>(result.message, result.error)
 }
 
 /**
@@ -62,7 +85,7 @@ export const flatMap = <T, U>(func: (value: T) => Result<U>) => (result: Result<
    if (isOk(result)) {
       return func(result.value)
    }
-   return result
+   return failure<U>(result.message, result.error)
 }
 
 /**
@@ -108,7 +131,7 @@ export const lift = <A, B>(func: (value: A) => B) => (result: Result<A>): Result
    if (isOk(result)) {
       return of(() => func(result.value))
    }
-   return result
+   return failure<B>(result.message, result.error)
 }
 
 /**

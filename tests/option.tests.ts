@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import * as O from "../src/option";
+import { isFailure, isOk } from "../src/result.ts";
 
 describe("Option", () => {
    it("should create an option with a value", () => {
@@ -73,5 +74,19 @@ describe("Option", () => {
       )
       const res2 = O.orElse("3")(res1)
       expect(res2).toEqual("3")
+   })
+})
+
+describe("Option transformers", () => {
+   it("should convert some to an ok", () => {
+      const source = O.some(1)
+      const result = source.toResult("Not a number")
+      expect(isOk(result)).toBeTruthy()
+   })
+
+   it("should convert none to a failure", () => {
+      const source = O.none()
+      const result = source.toResult("Not a number")
+      expect(isFailure(result)).toBeTruthy()
    })
 })

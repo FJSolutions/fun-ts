@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 import * as R from "../src/result";
+import * as O from "../src/option.ts";
+import { isOk } from "../src/result";
+import { isNone, isSome } from "../src/option.ts";
 
 describe("Result", () => {
    describe("ok", () => {
@@ -283,6 +286,20 @@ describe("Result", () => {
             R.map((x: number) => x * 2),
          )
          expect(R.isFailure(result) && result.message).toBe("initial failure")
+      })
+   })
+
+   describe("Result transformers", () => {
+      it("should convert an OK to a Some", () => {
+         const source = R.ok(1)
+         const result = source.toOption()
+         expect(isSome(result)).toBeTruthy()
+      })
+
+      it("should convert a Failure to a None", () => {
+         const source = R.failure("Not a number")
+         const result = source.toOption()
+         expect(isNone(result)).toBeTruthy()
       })
    })
 })
