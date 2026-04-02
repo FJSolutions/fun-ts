@@ -1,6 +1,14 @@
 import { none, type Option, some } from "./option.ts";
 
 interface ResultBase<T> {
+   /**
+    * If the result is a Failure then the default value is returned
+    * @param The default value to return if the Result is a Failure
+    */
+   orElse: (defaultValue: T) => T
+   /**
+    * Converts the Result to an Option
+    */
    toOption: () => Option<T>;
 }
 
@@ -27,6 +35,7 @@ export type Result<T> = Ok<T> | Failure<T>;
 export const ok = <T>(value: T): Result<T> => ({
    key: "OK",
    value,
+   orElse: (_defaultValue: T) => value,
    toOption: () => some(value),
 })
 
@@ -39,6 +48,7 @@ export const failure = <T extends unknown>(message: string, error?: Error): Resu
    key: "Failure",
    message,
    error,
+   orElse: (defaultValue) => defaultValue,
    toOption: () => none()
 })
 
