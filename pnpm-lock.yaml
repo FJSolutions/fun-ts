@@ -8,9 +8,6 @@ importers:
 
   .:
     devDependencies:
-      esbuild:
-        specifier: ^0.27.4
-        version: 0.27.4
       oxlint:
         specifier: ^1.57.0
         version: 1.57.0
@@ -1028,6 +1025,7 @@ snapshots:
       '@esbuild/win32-arm64': 0.27.4
       '@esbuild/win32-ia32': 0.27.4
       '@esbuild/win32-x64': 0.27.4
+    optional: true
 
   estree-walker@3.0.3:
     dependencies:

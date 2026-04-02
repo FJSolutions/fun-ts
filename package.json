@@ -1,15 +1,14 @@
 {
    "name": "fun-ts",
    "description": "A personal project grouping the most Functional Programming types & functions I use regularly in one place.",
-   "version": "0.2.0",
+   "version": "0.2.1",
    "type": "module",
    "main": "dist/index.js",
    "scripts": {
       "test": "vitest",
       "lint": "oxlint",
       "lint:fix": "oxlint --fix",
-      "build:tsc": "tsc --project tsconfig.build.json",
-      "build": "node --experimental-strip-types build.ts && pnpm build:tsc",
+      "build": "pnpm clean &&pnpm tsc --project tsconfig.build.json",
       "clean": "node --input-type=module --eval \"import{rmSync}from'fs';rmSync('dist',{recursive:true,force:true})\""
    },
    "keywords": [
@@ -20,7 +19,6 @@
    "license": "MIT",
    "packageManager": "pnpm@10.27.0",
    "devDependencies": {
-      "esbuild": "^0.27.4",
       "oxlint": "^1.57.0",
       "typescript": "^6.0.2",
       "vitest": "^4.1.1"
