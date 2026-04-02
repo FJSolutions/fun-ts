@@ -2,7 +2,7 @@
 
 A personal project, grouping the most Functional Programming types & functions I use regularly in one place.
 
-The functions in this library prefer arrow functions because of their inability to change the `this` context.  
+The functions in this library prefer arrow functions because of their inability to change the `this` context.
 
 ## Contents
 
@@ -11,7 +11,9 @@ The functions in this library prefer arrow functions because of their inability 
 - [Sequence](#sequence)
 - [Result](#result)
 - [General](#general)
-- [String](#strings)
+- [Strings](#strings)
+- [Numbers](#numbers)
+- [Documentation](#documentation)
 
 ## Pipe
 
@@ -27,7 +29,8 @@ A lazily iterated set of functions.
 
 ## Result
 
-A data structure and related functions that represents the result of an operation that can fail with some kind of context information.
+A data structure and related functions that represents the result of an operation that can fail with some kind of
+context information.
 
 ## General
 
@@ -40,9 +43,14 @@ The identity function which simply returns its value without doing anything to i
 ```ts
 const id = <T>(x: T): T => x;
 ```
+
 ## Strings
 
 A module for converting strings in a more functional way, including some convenience methods for casing.
+
+## Numbers
+
+A module that wraps the numeric parsing functions in `Option` or `Result`s.
 
 ## Documentation
 

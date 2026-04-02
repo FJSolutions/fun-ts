@@ -8,11 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+### Changed
+### Removed
+
+## [0.2.0] - 2026-04-02
+
+### Added
+
+- Transformation methods to `Option` and `Result` to convert from one to the other.
+- A `numbers` module that wraps the native parsing methods.
+
+## [0.1.0] - 2026-03-31
+
+### Added
 
 - General
   - `id`
 - Pipe
-  - Generic, strongly typed, function piping function (1 to 9 function parameters) 
+  - Generic, strongly typed, function piping function (1 to 9 function parameters)
 - Sequence
   - `Seq` interface
   - `map`, `filter`, `reduce`, `flatMap`, `take`/`limit`, `skip`/`offset` functions
@@ -38,10 +51,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update the way that the `pipe` functions implementation works in `option`, `pipe`, and `sequence`
-
-## [0.1.0] - ???
-
-### Added
-
-
-### Removed

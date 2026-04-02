@@ -1,4 +1,4 @@
-import { none, type Option, some } from "./option.ts";
+import { none, type Option, some } from "./option";
 
 interface ResultBase<T> {
    /**

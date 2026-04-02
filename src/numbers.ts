@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from "./utils.ts";
+import { isNullOrUndefined } from "./utils";
 import * as O from "./option";
 import * as R from "./result";
 

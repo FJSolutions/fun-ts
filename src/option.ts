@@ -1,5 +1,5 @@
 import { isNullOrUndefined } from "./utils";
-import { failure, ok, type Result } from "./result.ts";
+import { failure, ok, type Result } from "./result";
 
 /**
  * The type definition of an Option
