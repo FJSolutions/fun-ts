@@ -1,5 +1,5 @@
 import { isNullOrUndefined } from "./utils";
-import { failure, ok, type Result } from "./result";
+import { failure, success, type Result } from "./result";
 
 /**
  * The type definition of an Option
@@ -22,7 +22,7 @@ export const some = <T>(value: T): Option<T> => ({
    value,
    orElse: (_defaultValue: T) => value,
    match: <U>(_none: () => U, some: (value: T) => U) => some(value),
-   toResult: (_message: string): Result<T> => ok<T>(value)
+   toResult: (_message: string): Result<T> => success<T>(value)
 })
 
 /**

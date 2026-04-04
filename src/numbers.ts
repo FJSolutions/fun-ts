@@ -53,7 +53,7 @@ export const toIntResult = (input: string): R.Result<number> => {
       if (isNaN(num))
          return R.failure("Input to Int Result is Not a Number")
 
-      return R.ok(num)
+      return R.success(num)
    } catch (ex) {
       if (ex instanceof Error)
          return R.failure(ex.message, ex)
@@ -74,7 +74,7 @@ export const toFloatResult = (input: string): R.Result<number> => {
       if (isNaN(num))
          return R.failure("Input to Int Result is Not a Number")
 
-      return R.ok(num)
+      return R.success(num)
    } catch (ex) {
       if (ex instanceof Error)
          return R.failure(ex.message, ex)

@@ -12,8 +12,8 @@ interface ResultBase<T> {
    toOption: () => Option<T>;
 }
 
-interface Ok<T> extends ResultBase<T> {
-   key: "OK",
+interface Success<T> extends ResultBase<T> {
+   key: "Success",
    value: T
 }
 
@@ -26,14 +26,14 @@ interface Failure<T> extends ResultBase<T> {
 /**
  * The public interface of the Result type
  */
-export type Result<T> = Ok<T> | Failure<T>;
+export type Result<T> = Success<T> | Failure<T>;
 
 /**
  * Creates an OK `Result<T>`
  * @param value The OK value
  */
-export const ok = <T>(value: T): Result<T> => ({
-   key: "OK",
+export const success = <T>(value: T): Result<T> => ({
+   key: "Success",
    value,
    orElse: (_defaultValue: T) => value,
    toOption: () => some(value),
@@ -58,7 +58,7 @@ export const failure = <T extends unknown>(message: string, error?: Error): Resu
  */
 export const of = <T>(func: () => T): Result<T> => {
    try {
-      return ok(func())
+      return success(func())
    } catch (ex) {
       const err = ex instanceof Error ? ex : new Error(String(ex))
       return failure(err.message, err)
@@ -68,7 +68,7 @@ export const of = <T>(func: () => T): Result<T> => {
 /**
  * Checks if a Result is Ok
  */
-export const isOk = <T>(result: Result<T>): result is Ok<T> => result.key === "OK"
+export const isOk = <T>(result: Result<T>): result is Success<T> => result.key === "Success"
 
 /**
  * Checks if a Result is Failure
@@ -81,7 +81,7 @@ export const isFailure = <T>(result: Result<T>): result is Failure<T> => result.
  */
 export const map = <T, U>(func: (value: T) => U) => (result: Result<T>): Result<U> => {
    if (isOk(result)) {
-      return ok(func(result.value))
+      return success(func(result.value))
    }
    return failure<U>(result.message, result.error)
 }
