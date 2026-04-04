@@ -166,3 +166,16 @@ export function pipe(
 ) {
    return funcs.reduce((acc, func) => func(acc), data)
 }
+
+type DoBuilder<Ctx> = {
+   bind: <K extends string, V>(key: K, f: (ctx: Ctx) => V) => DoBuilder<Ctx & Record<K, V>>
+   return: <R>(f: (ctx: Ctx) => R) => R
+}
+
+const doBuilder = <Ctx>(ctx: Ctx): DoBuilder<Ctx> => ({
+   bind: (key, f) => doBuilder({ ...ctx, [key as string]: f(ctx) } as any),
+   return: (f) => f(ctx),
+})
+
+export const Do = () => doBuilder({})
+

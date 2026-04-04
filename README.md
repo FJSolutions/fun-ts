@@ -19,6 +19,9 @@ The functions in this library prefer arrow functions because of their inability 
 
 A general purpose function for chaining other functions together in pa pipeline.
 
+- `pipe`
+- `do`
+
 ## Option
 
 A data structure with related functions for handling optional values safely.

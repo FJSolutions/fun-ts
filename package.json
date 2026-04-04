@@ -1,7 +1,7 @@
 {
    "name": "fun-ts",
    "description": "A personal project grouping the most Functional Programming types & functions I use regularly in one place.",
-   "version": "0.2.1",
+   "version": "0.3.0",
    "type": "module",
    "main": "dist/index.js",
    "scripts": {
