@@ -108,6 +108,10 @@ class Maybe<T> implements Option<T> {
       return this.tag === "None"
    }
 
+   get tap(): T | undefined {
+      return this._value
+   }
+
    orElse = (defaultValue: T): T => this.isSome ? this._value! : defaultValue;
 
    map = <U>(func: (value: T) => U): Option<U> => {
@@ -138,12 +142,9 @@ class Maybe<T> implements Option<T> {
    }
 
    apply = <U>(func: Option<(value: T) => U>): Option<U> => {
-      if(func.isSome && this.isSome) {
-         const result = func.match(
-            (f: (value: T) => U) => f(this._value!),
-            () => null
-         )
-         //@ts-ignore
+      if (func.isSome && this.isSome) {
+         const f = (func as Maybe<(value: T) => U>).tap!
+         const result = f(this._value!)
          return lift<U>(result)
       }
       return none<U>()

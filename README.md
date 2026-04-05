@@ -4,6 +4,9 @@ A personal project, grouping the most Functional Programming types & functions I
 
 The functions in this library prefer arrow functions because of their inability to change the `this` context.
 
+After implementing the core types as structured object type objects and convention based functions,
+the decision was made to move everything to classes and interfaces so that pipe can be replaced with method chaining.
+
 ## Contents
 
 - [Pipe](#pipe)
