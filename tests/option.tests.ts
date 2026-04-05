@@ -1,92 +1,98 @@
 import { describe, expect, it } from "vitest";
-import * as O from "../src/option";
-import { isFailure, isOk } from "../src/result.ts";
+import { none, lift, some } from "../src/types";
 
 describe("Option", () => {
-   it("should create an option with a value", () => {
-      const option = O.some(1)
-      expect(option.key).toBe("Some")
-      expect(O.isSome(option)).toBeTruthy()
-      expect(O.isNone(option)).toBeFalsy()
+   it("Should be able to create a Some Option", () => {
+      const result = some(42)
+      expect(result.kind).toBe("Option")
+      expect(result.tag).toBe("Some");
+      expect(result.isSome).toBeTruthy();
+      expect(result.isNone).toBeFalsy();
+      expect(result.orElse(-1)).toBe(42);
    })
 
-   it("should create an option with no value", () => {
-      const option = O.none()
-      expect(O.isSome(option)).toBeFalsy()
-      expect(O.isNone(option)).toBeTruthy()
+   it("Should be able to create a None Option", () => {
+      const result = none()
+      expect(result.kind).toBe("Option")
+      expect(result.tag).toBe("None");
+      expect(result.isSome).toBeFalsy();
+      expect(result.isNone).toBeTruthy();
+      expect(result.orElse(-1)).toBe(-1);
    })
 
-   it("should create an option with of no value", () => {
-      const option = O.of(undefined)
-      expect(O.isSome(option)).toBeFalsy()
-      expect(O.isNone(option)).toBeTruthy()
-   })
-
-   it("should create an option with of a null value", () => {
-      const option = O.of(null)
-      expect(O.isSome(option)).toBeFalsy()
-      expect(O.isNone(option)).toBeTruthy()
-   })
-
-   it("should match an option with a value", () => {
+   it("should map a value from the given Some option", () => {
       const result =
-         O.some(1)
+         some(36)
+            .map(value => value + 6)
+            .orElse(-1)
+      expect(result).toBe(42);
+   })
+
+   it("should map a value from the given None option", () => {
+      const result =
+         none<number>()
+            .map(value => value + 6)
+            .orElse(-1)
+      expect(result).toBe(-1);
+   })
+
+   it("should bind a value from a Some option", () => {
+      const result =
+         some(21)
+            .bind(value => some(value * 2))
+            .orElse(-1)
+      expect(result).toBe(42)
+   })
+
+   it("should return None when binding a None option", () => {
+      const result =
+         none<number>()
+            .bind(value => some(value * 2))
+            .orElse(-1)
+      expect(result).toBe(-1)
+   })
+
+   it("should return None when bind returns None", () => {
+      const result =
+         some(42)
+            .bind(_ => none<number>())
+            .orElse(-1)
+      expect(result).toBe(-1)
+   })
+
+   it("should match a Some option", () => {
+      const result =
+         some(42)
             .match(
-               () => "None",
-               (value) => `Some(${value})`,
+               value => `Some(${value})`,
+               () => "None"
             )
-      expect(result).toEqual("Some(1)")
+      expect(result).toBe("Some(42)")
    })
 
-   it("should match an option with no value", () => {
-      const option = O.none()
-      const result = O.match(
-         () => "None",
-         (value) => `Some(${value})`,
-      )(option)
-      expect(result).toEqual("None")
+   it("should match a None option", () => {
+      const result =
+         none<number>()
+            .match(
+               value => `Some(${value})`,
+               () => "None"
+            )
+      expect(result).toBe("None")
    })
 
-   it("should return a value from a some option", () => {
-      const option = O.orElse(2)(O.some(1))
-      expect(option).toEqual(1)
+   it("should create a Some from a non-null value with of", () => {
+      const result = lift(42)
+      expect(result.isSome).toBeTruthy()
+      expect(result.orElse(-1)).toBe(42)
    })
 
-   it("should return a value from a none option", () => {
-      const option = O.none().orElse(2)
-      expect(option).toEqual(2)
+   it("should create a None from undefined with of", () => {
+      const result = lift(undefined)
+      expect(result.isNone).toBeTruthy()
    })
 
-   it("should return a piped value from some 1", () => {
-      const res1 = O.pipe(
-         O.some(1),
-         O.lift((value) => value + 1)
-      )
-      const res2 = O.orElse(3)(res1)
-      expect(res2).toEqual(2)
-   })
-
-   it("should return a piped value from none", () => {
-      const res1 = O.pipe(
-         O.none<number>(),
-         O.lift((value) => value + 1),
-         O.lift((value) => value.toString())
-      )
-      const res2 = O.orElse("3")(res1)
-      expect(res2).toEqual("3")
-   })
-})
-
-describe("Option transformers", () => {
-   it("should convert some to an ok", () => {
-      const source = O.some(1)
-      const result = source.toResult("Not a number")
-      expect(isOk(result)).toBeTruthy()
-   })
-
-   it("should convert none to a failure", () => {
-      const source = O.none()
-      const result = source.toResult("Not a number")
-      expect(isFailure(result)).toBeTruthy()
+   it("should create a None from null with of", () => {
+      const result = lift(null)
+      expect(result.isNone).toBeTruthy()
    })
 })

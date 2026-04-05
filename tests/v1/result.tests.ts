@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import * as R from "../src/result";
-import { isNone, isSome } from "../src/option";
+import * as R from "../../src/result";
+import { isNone, isSome } from "../../src/option";
 
 describe("Result", () => {
    describe("ok", () => {
       it("should create an Ok result with the given value", () => {
          const result = R.success(42)
          expect(result.key).toBe("Success")
-         expect(R.isOk(result)).toBeTruthy()
+         expect(R.isSuccess(result)).toBeTruthy()
          expect(R.isFailure(result)).toBeFalsy()
       })
 
@@ -21,7 +21,7 @@ describe("Result", () => {
       it("should create a Failure result with a message", () => {
          const result = R.failure("something went wrong")
          expect(result.key).toBe("Failure")
-         expect(R.isOk(result)).toBeFalsy()
+         expect(R.isSuccess(result)).toBeFalsy()
          expect(R.isFailure(result)).toBeTruthy()
       })
 
@@ -45,7 +45,7 @@ describe("Result", () => {
    describe("of", () => {
       it("should return Ok when the function succeeds", () => {
          const result = R.of(() => 10)
-         expect(R.isOk(result)).toBeTruthy()
+         expect(R.isSuccess(result)).toBeTruthy()
          expect(R.orElse(0)(result)).toBe(10)
       })
 
@@ -137,7 +137,7 @@ describe("Result", () => {
    describe("filter", () => {
       it("should keep an Ok that satisfies the predicate", () => {
          const result = R.filter((x: number) => x > 0, "must be positive")(R.success(5))
-         expect(R.isOk(result)).toBeTruthy()
+         expect(R.isSuccess(result)).toBeTruthy()
       })
 
       it("should turn an Ok into Failure when predicate fails", () => {

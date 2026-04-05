@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import * as Seq from "../src/sequence";
-import { id } from "../src";
+import * as Seq from "../../src/sequence";
+import { id } from "../../src";
 
 describe("Sequence", () => {
    describe.skip("fold", () => {

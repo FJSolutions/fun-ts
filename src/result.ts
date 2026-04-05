@@ -68,7 +68,7 @@ export const of = <T>(func: () => T): Result<T> => {
 /**
  * Checks if a Result is Ok
  */
-export const isOk = <T>(result: Result<T>): result is Success<T> => result.key === "Success"
+export const isSuccess = <T>(result: Result<T>): result is Success<T> => result.key === "Success"
 
 /**
  * Checks if a Result is Failure
@@ -80,7 +80,7 @@ export const isFailure = <T>(result: Result<T>): result is Failure<T> => result.
  * @param func A function to apply to the Ok value
  */
 export const map = <T, U>(func: (value: T) => U) => (result: Result<T>): Result<U> => {
-   if (isOk(result)) {
+   if (isSuccess(result)) {
       return success(func(result.value))
    }
    return failure<U>(result.message, result.error)
@@ -92,7 +92,7 @@ export const map = <T, U>(func: (value: T) => U) => (result: Result<T>): Result<
  * @param func A function that takes a plain value and returns a Result
  */
 export const flatMap = <T, U>(func: (value: T) => Result<U>) => (result: Result<T>): Result<U> => {
-   if (isOk(result)) {
+   if (isSuccess(result)) {
       return func(result.value)
    }
    return failure<U>(result.message, result.error)
@@ -104,7 +104,7 @@ export const flatMap = <T, U>(func: (value: T) => Result<U>) => (result: Result<
  * @param message The failure message if the predicate is not satisfied
  */
 export const filter = <T>(predicate: (value: T) => boolean, message: string) => (result: Result<T>): Result<T> => {
-   if (isOk(result) && !predicate(result.value)) {
+   if (isSuccess(result) && !predicate(result.value)) {
       return failure(message)
    }
    return result
@@ -116,7 +116,7 @@ export const filter = <T>(predicate: (value: T) => boolean, message: string) => 
  * @param onOk A function to handle the Ok value
  */
 export const fold = <T, U>(onFailure: (message: string, error?: Error) => U, onOk: (value: T) => U) => (result: Result<T>): U => {
-   if (isOk(result)) {
+   if (isSuccess(result)) {
       return onOk(result.value)
    }
    return onFailure(result.message, result.error)
@@ -127,7 +127,7 @@ export const fold = <T, U>(onFailure: (message: string, error?: Error) => U, onO
  * @param defaultValue The value to return if the Result is a Failure
  */
 export const orElse = <T>(defaultValue: T) => (result: Result<T>): T => {
-   if (isOk(result)) {
+   if (isSuccess(result)) {
       return result.value
    }
    return defaultValue
@@ -138,7 +138,7 @@ export const orElse = <T>(defaultValue: T) => (result: Result<T>): T => {
  * @param func A function that takes a plain value and may throw
  */
 export const lift = <A, B>(func: (value: A) => B) => (result: Result<A>): Result<B> => {
-   if (isOk(result)) {
+   if (isSuccess(result)) {
       return of(() => func(result.value))
    }
    return failure<B>(result.message, result.error)
@@ -151,7 +151,7 @@ export const lift = <A, B>(func: (value: A) => B) => (result: Result<A>): Result
  * @return A `U`
  */
 export const match = <T, U>(ok: (value: T) => U, failure: (message: string, error?: Error) => U) => (result: Result<T>) => {
-   if (isOk(result)) {
+   if (isSuccess(result)) {
       return ok(result.value)
    } else {
       return failure(result.message, result.error)

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { id, P } from "../src";
-import * as Seq from "../src/sequence";
-import { pipe } from "../src/pipe";
+import { id, P } from "../../src";
+import * as Seq from "../../src/sequence";
+import { pipe } from "../../src/pipe";
 
 describe("Do", () => {
    test("returns a value from a single bind", () => {
