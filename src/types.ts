@@ -43,7 +43,7 @@ export interface Monad<T> {
 /**
  * A function that takes a value an indicates whether it represents a `true` value in this context or not.
  */
-type Predicate<T> = (value: T) => boolean
+export type Predicate<T> = (value: T) => boolean
 
 /**
  * The interface for objects that can be filtered

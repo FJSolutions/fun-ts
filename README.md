@@ -50,6 +50,10 @@ The identity function which simply returns its value without doing anything to i
 ```ts
 const id = <T>(x: T): T => x;
 ```
+### `lazy`
+
+A function for constructing a value once, caching it, and then returning the cached value. 
+
 
 ## Strings
 

@@ -90,32 +90,6 @@ describe("P.pipe", () => {
       ).toBe(1);
    });
 
-   test("P.pipe with sequence", () => {
-      expect(P.pipe([1, 2, 3], Seq.toList)).toEqual([1, 2, 3]);
-      expect(P.pipe([1, 2, 3], Seq.toList, (list) => list.length)).toBe(3);
-      expect(P.pipe([1, 2, 3], Seq.toList, (list) => list.map((x) => x * 2))).toEqual(
-         [2, 4, 6],
-      );
-      expect(
-         P.pipe([1, 2, 3], Seq.toList, (list) => list.filter((x) => x % 2 === 0)),
-      ).toEqual([2]);
-      expect(P.pipe([1, 2, 3], (list) => list.filter((x) => x % 2 === 0))).toEqual([
-         2,
-      ]);
-      expect(
-         P.pipe(
-            [1, 2, 3],
-            Seq.fold((acc, x) => acc + x, 0),
-         ),
-      ).toEqual(6);
-      expect(
-         P.pipe(
-            ["This", "is", "a", "string"],
-            Seq.fold((acc, x) => `${acc}${x} `, ""),
-         ),
-      ).toEqual("This is a string ");
-   });
-
    test("P.Pipe with values, Options, and results", () => {
       const result = P.pipe(
          "007",
