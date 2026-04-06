@@ -95,4 +95,36 @@ describe("Option", () => {
       const result = lift(null)
       expect(result.isNone).toBeTruthy()
    })
+
+   describe("filter", () => {
+      it("should filter a value in", () => {
+         const result = some(42)
+            .filter(val => val > 18)
+            .orElse(-1)
+         expect(result).toBe(42)
+      })
+
+      it("should filter a value out", () => {
+         const result = some(42)
+            .filter(val => val < 18)
+            .orElse(-1)
+         expect(result).toBe(-1)
+      })
+   })
+
+   describe("fold", () => {
+      it("should fold a value", () => {
+         const result = some(42)
+            .fold((acc, val) => acc + val, 0)
+            .orElse(-1)
+         expect(result).toBe(42)
+      })
+
+      it("should fold a value", () => {
+         const result = none<number>()
+            .fold((acc, val) => acc + val, 6)
+            .orElse(-1)
+         expect(result).toBe(-1)
+      })
+   })
 })

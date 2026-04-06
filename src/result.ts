@@ -1,4 +1,4 @@
-import type { Functor, Kind, Kinds, Monad } from "./types";
+import type { Filterable, Foldable, Functor, Kind, Kinds, Monad } from "./types";
 import { none, type Option, some } from "./option";
 import { isNullOrUndefined } from "./utils";
 
@@ -8,7 +8,7 @@ type ResultTypes = "Success" | "Failure";
  * The interface to the Result type
  */
 //@ts-ignore
-export interface Result<T> extends Kind, Functor<T>, Monad<T> {
+export interface Result<T> extends Kind, Functor<T>, Monad<T>, Filterable<T>, Foldable<T> {
    readonly kind: Kinds;
    /**
     * The type of result that this is
@@ -44,6 +44,16 @@ export interface Result<T> extends Kind, Functor<T>, Monad<T> {
     * @param failure The function to run if the Result is a Failure
     */
    match: <U>(success: (value: T) => U, failure: (errorMessage: string, error?: Error) => U) => U
+   /**
+    * Filters the value of this Option based on the supplied predicate
+    */
+   filter: (func: (value: T) => boolean) => Result<T>
+   /**
+    * Folds the initial value into the supplied function and returns its result
+    * @param func The folder function
+    * @param initialValue The initial value to start the folding process off
+    */
+   fold: <U>(func: (acc: U, value: T) => U, initialValue: U) => Result<U>
 }
 
 class Either<T> implements Result<T> {
@@ -107,6 +117,22 @@ class Either<T> implements Result<T> {
          return this._value
       } else {
          return defaultValue
+      }
+   }
+
+   filter = (func: (value: T) => boolean): Result<T> => {
+      if (!isNullOrUndefined(this._value) && func(this._value)) {
+         return this
+      } else {
+         return failure(this._errorMessage ?? "This was filtered out", this._error)
+      }
+   }
+
+   fold = <U>(func: (acc: U, value: T) => U, initialValue: U): Result<U> => {
+      if (this.isSuccess && !isNullOrUndefined(this._value)) {
+         return success(func(initialValue, this._value))
+      } else {
+         return failure<U>(this._errorMessage ?? "Failure", this._error)
       }
    }
 }

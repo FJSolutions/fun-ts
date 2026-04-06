@@ -40,3 +40,37 @@ export interface Monad<T> {
    flatMap: <U>(func: (value: T) => Monad<U>) => Monad<U>
 }
 
+/**
+ * A function that takes a value an indicates whether it represents a `true` value in this context or not.
+ */
+type Predicate<T> = (value: T) => boolean
+
+/**
+ * The interface for objects that can be filtered
+ */
+export interface Filterable<T> {
+   /**
+    * Filters the value of this Filterable based on the supplied predicate
+    */
+   filter: (func: Predicate<T>) => this
+}
+
+/**
+ * The folding function.
+ * @param acc The accumulator value
+ * @param value The current value
+ */
+type FolderFunc<T, U> = (acc: U, value: T) => U
+
+/**
+ * The interface for objects that are Foldable
+ */
+export interface Foldable<T> {
+   /**
+    * Folds the initial value into the supplied function and returns its result
+    * @param func The folder function
+    * @param initialValue The initial value to start the folding process off
+    */
+   fold: <U>(func: FolderFunc<T, U>, initialValue: U) => Foldable<U>
+}
+

@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from "./utils";
 import { failure, success, type Result } from "./result";
-import type { Applicative, Functor, Kind, Kinds, Monad } from "./types";
+import type { Applicative, Filterable, Foldable, Functor, Kind, Kinds, Monad } from "./types";
 
 
 type OptionType = "Some" | "None"
@@ -9,7 +9,7 @@ type OptionType = "Some" | "None"
  * The interface of an Option type
  */
 // @ts-ignore
-export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T> {
+export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T>, Filterable<T>, Foldable<T> {
    readonly kind: Kinds;
    /**
     * A key to identify what kind of option this is
@@ -51,6 +51,16 @@ export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T> {
     * @param nont The function to run if the Option is a None
     */
    match: <U>(some: (value: T) => U, none: () => U) => U
+   /**
+    * Filters the value of this Option based on the supplied predicate
+    */
+   filter: (func: (value: T) => boolean) => Option<T>
+   /**
+    * Folds the initial value into the supplied function and returns its result
+    * @param func The folder function
+    * @param initialValue The initial value to start the folding process off
+    */
+   fold: <U>(func: (acc: U, value: T) => U, initialValue: U) => Option<U>
 }
 
 class Maybe<T> implements Option<T> {
@@ -119,6 +129,23 @@ class Maybe<T> implements Option<T> {
          return success(this._value)
       } else {
          return failure(errorMessage)
+      }
+   }
+
+   filter = (func: (value: T) => boolean): Option<T> => {
+      if (this.isSome && !isNullOrUndefined(this._value) && func(this._value)) {
+         return some(this._value)
+      } else {
+         return none()
+      }
+   }
+
+   fold = <U>(func: (acc: U, value: T) => U, initialValue: U): Option<U> => {
+      if (this.isSome && !isNullOrUndefined(this._value)) {
+         const result = func(initialValue, this._value)
+         return lift(result)
+      } else {
+         return none<U>()
       }
    }
 }

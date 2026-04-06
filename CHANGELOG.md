@@ -7,11 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Filterable` and `Foldable` interfaces to the `types` module.
+- Implemented `Filterable` and `Foldable` on `Option` and `Result`
+
+### Changed
+
+- Extraction of common traits into independent interfaces
+- Complete reimplementation of Option to use a public interface and a private class implementation
+- Also complete reimplementation of Result to use a public interface and a private class implementation
+- Renamed the `Do` function to `accumulate`, and added the ability to pass in an optional initial state. 
+
 ## [0.4.0] - 2026-04-04
 
 ### Changed
 
-- Teh result type variants are now `Success` and `Failure`, `OK` has been changed to `Success`
+- The result type variants are now `Success` and `Failure`; the `OK` labels and identifiers have been changed to
+  `Success`, and also for `Error` to `Failure`
 
 ## [0.3.0] - 2026-04-04
 
@@ -31,30 +44,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - General
-  - `id`
+   - `id`
 - Pipe
-  - Generic, strongly typed, function piping function (1 to 9 function parameters)
+   - Generic, strongly typed, function piping function (1 to 9 function parameters)
 - Sequence
-  - `Seq` interface
-  - `map`, `filter`, `reduce`, `flatMap`, `take`/`limit`, `skip`/`offset` functions
+   - `Seq` interface
+   - `map`, `filter`, `reduce`, `flatMap`, `take`/`limit`, `skip`/`offset` functions
 - Option
-  - `Option` interface
-  - `of`, `some`, `none`, `isSome`, `isNone`, `orElse`, `lift`, `match` utility functions
-  - `match` & `pipe` functions
+   - `Option` interface
+   - `of`, `some`, `none`, `isSome`, `isNone`, `orElse`, `lift`, `match` utility functions
+   - `match` & `pipe` functions
 - Result
-  - `Result` interface
-  - `of`, `ok`, `failure`, `isOk`, `isFailure`, `orElse`, `lift`, `match` utility functions
-  - `match` & `pipe` functions
+   - `Result` interface
+   - `of`, `ok`, `failure`, `isOk`, `isFailure`, `orElse`, `lift`, `match` utility functions
+   - `match` & `pipe` functions
 - Strings
-  - Case conversion methods
-    - `toUpper`
-    - `toLower`
-    - `capitalise`
-    - `toSentence`
-    - `toPascal`
-    - `toCamel`
-    - `toKebab`
-    - `toSnake`
+   - Case conversion methods
+      - `toUpper`
+      - `toLower`
+      - `capitalise`
+      - `toSentence`
+      - `toPascal`
+      - `toCamel`
+      - `toKebab`
+      - `toSnake`
 
 ### Changed
 

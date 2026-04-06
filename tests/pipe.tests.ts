@@ -1,33 +1,48 @@
 import { describe, expect, test } from "vitest";
-import { id, P } from "../../src";
-import * as Seq from "../../src/sequence";
-import { pipe } from "../../src/pipe";
+import { id } from "../src";
+import * as Seq from "../src/sequence";
+import * as P from "../src/pipe";
+import * as N from "../src/numbers";
+import * as S from "../src/strings";
 
 describe("Do", () => {
    test("returns a value from a single bind", () => {
-      const result = P.Do()
+      const result = P.accumulator()
          .bind("a", () => 42)
-         .return(({ a }) => a)
+         .return(({a}) => a)
 
       expect(result).toBe(42)
    })
 
    test("later binds can reference earlier ones", () => {
-      const result = P.Do()
+      const result = P.accumulator()
          .bind("a", () => 10)
-         .bind("b", ({ a }) => a + 5)
-         .return(({ a, b }) => a + b)
+         .bind("b", ({a}) => a + 5)
+         .return(({a, b}) => a + b)
 
       expect(result).toBe(25)
    })
 
    test("handles heterogeneous types", () => {
-      const result = P.Do()
+      const result = P.accumulator()
          .bind("n", () => 42)
          .bind("s", () => "hello")
-         .return(({ n, s }) => `${s} ${n}`)
+         .return(({n, s}) => `${s} ${n}`)
 
       expect(result).toBe("hello 42")
+   })
+
+   test("P.Do with an initial context", () => {
+      const result = P.accumulator({initials: "FBJ"})
+         .return(ctx => ctx.initials)
+      expect(result).toBe("FBJ")
+   })
+
+   test("P.Do with values, Options, and results", () => {
+      const result = P.accumulator()
+         .bind("noOpt", ctx => N.toFloatResult("FBJ"))
+         .return(ctx => ctx.noOpt.orElse(-1))
+      expect(result).toBe(-1)
    })
 })
 
@@ -100,4 +115,14 @@ describe("P.pipe", () => {
          ),
       ).toEqual("This is a string ");
    });
+
+   test("P.Pipe with values, Options, and results", () => {
+      const result = P.pipe(
+         "007",
+         N.toIntOption,
+         (o) => o.toResult("Not a number"),
+         (r) => r.orElse(-1)
+      )
+      expect(result).toEqual(7)
+   })
 })

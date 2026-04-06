@@ -184,6 +184,67 @@ describe("Result", () => {
       })
    })
 
+   describe("filter", () => {
+      it("should return the success unchanged when the predicate passes", () => {
+         const r = success(42).filter(x => x > 0)
+         expect(r.isSuccess).toBeTruthy()
+         expect(r.orElse(-1)).toBe(42)
+      })
+
+      it("should return a failure when the predicate fails", () => {
+         const r = success(42).filter(x => x < 0)
+         expect(r.isFailure).toBeTruthy()
+         expect(r.orElse(-1)).toBe(-1)
+      })
+
+      it("should return a failure unchanged when filtering a failure", () => {
+         const r = failure<number>("oops").filter(x => x > 0)
+         expect(r.isFailure).toBeTruthy()
+         expect(r.orElse(-1)).toBe(-1)
+      })
+
+      it("should chain with map after a passing filter", () => {
+         const r = success(21)
+            .filter(x => x > 0)
+            .map(x => x * 2)
+            .orElse(-1)
+         expect(r).toBe(42)
+      })
+
+      it("should short-circuit map after a failing filter", () => {
+         const r = success(21)
+            .filter(x => x > 100)
+            .map(x => x * 2)
+            .orElse(-1)
+         expect(r).toBe(-1)
+      })
+   })
+
+   describe("fold", () => {
+      it("should apply the folder function to the value of a success", () => {
+         const r = success(42).fold((acc, x) => acc + x, 0)
+         expect(r.isSuccess).toBeTruthy()
+         expect(r.orElse(-1)).toBe(42)
+      })
+
+      it("should use the initial value as the accumulator", () => {
+         const r = success(10).fold((acc, x) => acc + x, 5)
+         expect(r.orElse(-1)).toBe(15)
+      })
+
+      it("should return a failure when folding a failure", () => {
+         const r = failure<number>("oops").fold((acc, x) => acc + x, 0)
+         expect(r.isFailure).toBeTruthy()
+         expect(r.orElse(-1)).toBe(-1)
+      })
+
+      it("should fold into a different type", () => {
+         const r = success(42).fold((acc, x) => `${acc}${x}`, "value:")
+         expect(r.isSuccess).toBeTruthy()
+         expect(r.orElse("none")).toBe("value:42")
+      })
+   })
+
    describe("flatMap", () => {
       it("should bind a success to another success", () => {
          const r = success(21).flatMap(x => success(x * 2))

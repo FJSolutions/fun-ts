@@ -172,10 +172,14 @@ type DoBuilder<Ctx> = {
    return: <R>(f: (ctx: Ctx) => R) => R
 }
 
-const doBuilder = <Ctx>(ctx: Ctx): DoBuilder<Ctx> => ({
-   bind: (key, f) => doBuilder({ ...ctx, [key as string]: f(ctx) } as any),
+const accumulatorBuilder = <Ctx>(ctx: Ctx): DoBuilder<Ctx> => ({
+   bind: (key, f) => accumulatorBuilder({...ctx, [key as string]: f(ctx)} as any),
    return: (f) => f(ctx),
 })
 
-export const Do = () => doBuilder({})
+/**
+ * Creates a context for chaining together functions, capturing their returned values, and passing the results on into successive functions
+ * @param initial (Optional) An object to use as the initial state to pass into the chain of functions.
+ */
+export const accumulator = <Ctx extends object = {}>(initial?: Ctx) => accumulatorBuilder(initial ?? {} as Ctx)
 
