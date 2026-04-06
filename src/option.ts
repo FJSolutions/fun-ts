@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from "./utils";
 import { failure, success, type Result } from "./result";
-import type { Applicative, Functor, Kind, Kinds, Match, Monad } from "./types";
+import type { Applicative, Functor, Kind, Kinds, Monad } from "./types";
 
 
 type OptionType = "Some" | "None"
@@ -9,7 +9,7 @@ type OptionType = "Some" | "None"
  * The interface of an Option type
  */
 // @ts-ignore
-export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T>, Match<T> {
+export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T> {
    readonly kind: Kinds;
    /**
     * A key to identify what kind of option this is
@@ -45,6 +45,12 @@ export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T>, M
     * @param errorMessage The error message to use if the Option is None
     */
    toResult: (errorMessage: string) => Result<T>
+   /**
+    * Matches this Option's value with a matching function that returns a common type
+    * @param some The function to run if the Option is a Some
+    * @param nont The function to run if the Option is a None
+    */
+   match: <U>(some: (value: T) => U, none: () => U) => U
 }
 
 class Maybe<T> implements Option<T> {

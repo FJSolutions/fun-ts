@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as S from "../../src/strings"
+import * as S from "../src/strings"
 
 describe("strings", () => {
    it('should upper case an input string', () => {

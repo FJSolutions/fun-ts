@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { toFloatOption, toFloatResult, toIntOption, toIntResult } from "../../src/numbers";
-import { isFailure, isSuccess } from "../../src/result";
+import { toFloatOption, toFloatResult, toIntOption, toIntResult } from "../src/numbers";
 
 describe("numbers", () => {
 
@@ -62,60 +61,56 @@ describe("numbers", () => {
 
    describe("parse string to int result", () => {
       it("should return none with an empty string", () => {
-         const result = toIntResult("")
-         expect(isFailure(result)).toBeTruthy()
+         const result = toIntResult("").isFailure
+         expect(result).toBeTruthy()
       })
 
       it("should return none with a null or undefined string", () => {
          //@ts-ignore
-         const result = toIntResult()
-         expect(isFailure(result)).toBeTruthy()
+         const result = toIntResult().isFailure
+         expect(result).toBeTruthy()
       })
 
       it("should return none with no digits", () => {
-         const result = toIntResult("NO DIGITS")
-         expect(isFailure(result)).toBeTruthy()
+         const result = toIntResult("NO DIGITS").isFailure
+         expect(result).toBeTruthy()
       })
 
       it("should return none with no digits", () => {
          const result = toIntResult("123")
-         expect(isSuccess(result)).toBeTruthy()
          expect(result.orElse(-1)).toEqual(123.0)
       })
 
       it("should return none with no digits", () => {
          const result = toIntResult("123.456")
-         expect(isSuccess(result)).toBeTruthy()
          expect(result.orElse(-1)).toEqual(123)
       })
    })
 
    describe("parse string to float result", () => {
       it("should return failure with an empty string", () => {
-         const result = toFloatResult("")
-         expect(isFailure(result)).toBeTruthy()
+         const result = toFloatResult("").isFailure
+         expect(result).toBeTruthy()
       })
 
       it("should return failure with a null or undefined string", () => {
          //@ts-ignore
-         const result = toFloatResult()
-         expect(isFailure(result)).toBeTruthy()
+         const result = toFloatResult().isFailure
+         expect(result).toBeTruthy()
       })
 
       it("should return failure with no digits", () => {
-         const result = toFloatResult("NO DIGITS")
-         expect(isFailure(result)).toBeTruthy()
+         const result = toFloatResult("NO DIGITS").isFailure
+         expect(result).toBeTruthy()
       })
 
       it("should return failure with no digits", () => {
          const result = toFloatResult("123.0")
-         expect(isSuccess(result)).toBeTruthy()
          expect(result.orElse(-1)).toEqual(123.0)
       })
 
       it("should return none with no digits", () => {
          const result = toFloatResult("123.456")
-         expect(isSuccess(result)).toBeTruthy()
          expect(result.orElse(-1)).toEqual(123.456)
       })
    })

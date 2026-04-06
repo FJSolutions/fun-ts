@@ -35,11 +35,8 @@ export interface Applicative<T> {
  */
 export interface Monad<T> {
    /**
-    * Maps a value to a value in this Kind of Monad
+    * Maps a value to another value in this Kind of Monad
     */
    flatMap: <U>(func: (value: T) => Monad<U>) => Monad<U>
 }
 
-export interface Match<T> {
-   match: <U>(some: (value: T) => U, none: () => U) => U
-}
