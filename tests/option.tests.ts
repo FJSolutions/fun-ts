@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { none, lift, some } from "../src/types";
+import { none, lift, some } from "../src/option";
 
 describe("Option", () => {
    it("Should be able to create a Some Option", () => {
@@ -31,7 +31,7 @@ describe("Option", () => {
    it("should map a value from the given None option", () => {
       const result =
          none<number>()
-            .map(value => value + 6)
+            .map((value) => value + 6)
             .orElse(-1)
       expect(result).toBe(-1);
    })
@@ -39,7 +39,7 @@ describe("Option", () => {
    it("should bind a value from a Some option", () => {
       const result =
          some(21)
-            .bind(value => some(value * 2))
+            .flatMap(value => some(value * 2))
             .orElse(-1)
       expect(result).toBe(42)
    })
@@ -47,7 +47,7 @@ describe("Option", () => {
    it("should return None when binding a None option", () => {
       const result =
          none<number>()
-            .bind(value => some(value * 2))
+            .flatMap(value => some(value * 2))
             .orElse(-1)
       expect(result).toBe(-1)
    })
@@ -55,7 +55,7 @@ describe("Option", () => {
    it("should return None when bind returns None", () => {
       const result =
          some(42)
-            .bind(_ => none<number>())
+            .flatMap(_ => none<number>())
             .orElse(-1)
       expect(result).toBe(-1)
    })

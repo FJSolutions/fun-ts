@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import * as R from "../../src/result";
-import { isNone, isSome } from "../../src/option";
 
 describe("Result", () => {
    describe("ok", () => {
@@ -290,14 +289,14 @@ describe("Result", () => {
    describe("Result transformers", () => {
       it("should convert an OK to a Some", () => {
          const source = R.success(1)
-         const result = source.toOption()
-         expect(isSome(result)).toBeTruthy()
+         const result = source.toOption().isSome
+         expect(result).toBeTruthy()
       })
 
       it("should convert a Failure to a None", () => {
          const source = R.failure("Not a number")
-         const result = source.toOption()
-         expect(isNone(result)).toBeTruthy()
+         const result = source.toOption().isNone
+         expect(result).toBeTruthy()
       })
    })
 })
