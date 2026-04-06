@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-04-06
+
+This release is a breaking change to the API of the library to facilitate a change in methodology to embrace the more
+object/functional nature of TypeScript/JavaScript; that is, to have a public interface that esposes a private class
+implementation.
+
 ### Added
 
 - `Filterable` and `Foldable` interfaces to the `types` module.
@@ -15,9 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Extraction of common traits into independent interfaces
-- Complete reimplementation of Option to use a public interface and a private class implementation
+- Completed reimplementation of Option to use a public interface and a private class implementation
 - Also complete reimplementation of Result to use a public interface and a private class implementation
-- Renamed the `Do` function to `accumulate`, and added the ability to pass in an optional initial state. 
+- Renamed the `Do` function to `accumulate`, and added the ability to pass in an optional initial state.
+- Completed the refactoring of Sequence to use a public interface and a private class implementation
 
 ## [0.4.0] - 2026-04-04
 

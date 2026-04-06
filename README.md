@@ -12,8 +12,8 @@ so that pipe can be replaced with method chaining.
 
 - [Option](#option)
 - [Result](#result)
-- [Pipe](#pipe)
 - [Sequence](#sequence)
+- [Pipe](#pipe)
 - [General](#general)
 - [Strings](#strings)
 - [Numbers](#numbers)
@@ -21,27 +21,26 @@ so that pipe can be replaced with method chaining.
 
 ## Option
 
-A data structure with related functions for handling optional values safely.
+A data structure for representing values that can be absent, with related methods for handling optional values safely.
 
 ## Result
 
-A data structure and related functions that represents the result of an operation that can fail with some kind of
-context information.
+A data structure representing the result of an operation that can fail with some kind of context information.
+
+## Sequence
+
+A lazily iterated object which can be lazily chained together through its methods.
 
 ## Pipe
 
-General purpose functions for chaining other functions together into a pipeline.
+General purpose functions for chaining functions together into a pipeline.
 
 - `pipe`
 - `accumilate`
 
-## Sequence
-
-A lazily iterated set of functions.
-
 ## General
 
-Some general functions that can be used everywhere.
+General purpose functions for use with the library.
 
 ### `id`
 
@@ -50,14 +49,14 @@ The identity function which simply returns its value without doing anything to i
 ```ts
 const id = <T>(x: T): T => x;
 ```
+
 ### `lazy`
 
-A function for constructing a value once, caching it, and then returning the cached value. 
-
+A function for lazily constructing a value once, caching it, and thereafter returning the cached value.
 
 ## Strings
 
-A module for converting strings in a more functional way, including some convenience methods for casing.
+A module of functions for transforming strings, including some convenience functions for casing.
 
 ## Numbers
 
