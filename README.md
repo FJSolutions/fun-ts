@@ -1,12 +1,29 @@
 # fun-ts
 
-A personal project, grouping the most Functional Programming types & functions I use regularly in one place.
+Why `fun-ts`?
+Because TypeScript is fun, and functional programming in TypeScript and and
+should be fiun too.
 
-The functions in this library prefer arrow functions because of their inability to change the `this` context.
+This is a personal project, which I initially to understand how to efficiently
+use claude-code for development, refactoring, and testing; and was a huge
+success because I already kew what I wanted to do and how I wanted it
+implemented.
 
-After implementing the core types as structured object type objects and convention based functions (the more traditional
-FP approach &ndash; and less JS/TS native approach), the decision was made to move everything to classes and interfaces
-so that pipe can be replaced with method chaining.
+The project is a group of common Functional Programming types & functions that I
+like to use regularly, with a full coverage test suite.
+
+After implementing the core types as structured object type objects and
+convention based functions (the more traditional FP approach &ndash; and less
+JS/TS native approach), I made the decision to move everything to use public
+interfaces with private class implementations, so that piping over independent
+functions is replaced with method chaining &ndash; a much more intuitive
+object/functional design.
+
+After trying to recreate a monadic hierarchy of TypeScript interfaces but being
+frustrated by the lack of Higer Kinded Type support in the TypeScript type
+system, I elected to make the interfaces independant. Thus, my `Monad<T>`
+interface is not an `Applicative<T>` or even a `Functor<T>`! This is the kind of
+tradeoff that I have seen in other langages and implementaitons of FP patters.
 
 ## Contents
 
@@ -21,15 +38,18 @@ so that pipe can be replaced with method chaining.
 
 ## Option
 
-A data structure for representing values that can be absent, with related methods for handling optional values safely.
+A data structure for representing values that can be absent, with related
+methods for handling optional values safely. (The `maybe` monad of Haskell)
 
 ## Result
 
-A data structure representing the result of an operation that can fail with some kind of context information.
+A data structure representing the result of an operation that can fail with some
+kind of context information.
 
 ## Sequence
 
-A lazily iterated object which can be lazily chained together through its methods.
+A lazily iterated object which can be lazily chained together through its
+methods.
 
 ## Pipe
 
@@ -44,7 +64,8 @@ General purpose functions for use with the library.
 
 ### `id`
 
-The identity function which simply returns its value without doing anything to it.
+The identity function which simply returns its value without doing anything to
+it.
 
 ```ts
 const id = <T>(x: T): T => x;
@@ -52,11 +73,13 @@ const id = <T>(x: T): T => x;
 
 ### `lazy`
 
-A function for lazily constructing a value once, caching it, and thereafter returning the cached value.
+A function for lazily constructing a value once, caching it, and thereafter
+returning the cached value.
 
 ## Strings
 
-A module of functions for transforming strings, including some convenience functions for casing.
+A module of functions for transforming strings, including some convenience
+functions for casing.
 
 ## Numbers
 
