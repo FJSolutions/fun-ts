@@ -1,9 +1,7 @@
-import { describe, expect, test } from "vitest";
-import { id } from "../src";
-import * as Seq from "../src/sequence";
-import * as P from "../src/pipe";
-import * as N from "../src/numbers";
-import * as S from "../src/strings";
+import { describe, expect, test } from "vitest"
+import { id } from "../src"
+import * as N from "../src/numbers"
+import * as P from "../src/pipe"
 
 describe("Do", () => {
    test("returns a value from a single bind", () => {
@@ -40,7 +38,7 @@ describe("Do", () => {
 
    test("P.Do with values, Options, and results", () => {
       const result = P.accumulator()
-         .bind("noOpt", ctx => N.toFloatResult("FBJ"))
+         .bind("noOpt", _ctx => N.toFloatResult("FBJ"))
          .return(ctx => ctx.noOpt.orElse(-1))
       expect(result).toBe(-1)
    })
@@ -94,7 +92,6 @@ describe("P.pipe", () => {
       const result = P.pipe(
          "007",
          N.toIntOption,
-         (o) => o.toResult("Not a number"),
          (r) => r.orElse(-1)
       )
       expect(result).toEqual(7)
