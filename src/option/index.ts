@@ -1,7 +1,5 @@
-import { isNullOrUndefined } from "./utils";
-import { failure, success, type Result } from "./result";
-import type { Applicative, Filterable, Foldable, Functor, Kind, Kinds, Monad } from "./types";
-
+import { isNullOrUndefined } from "../utils";
+import type { Applicative, Filterable, Foldable, Functor, Kind, Kinds, Monad } from "../types";
 
 type OptionType = "Some" | "None"
 
@@ -41,11 +39,6 @@ export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T>, F
    // It is the return type of the function parameter that is causing the ts-error!
    flatMap: <U>(func: (value: T) => Option<U>) => Option<U>
    /**
-    * Returns the option as a Result, using the error message parameter for the Error if the value is None
-    * @param errorMessage The error message to use if the Option is None
-    */
-   toResult: (errorMessage: string) => Result<T>
-   /**
     * Matches this Option's value with a matching function that returns a common type
     * @param some The function to run if the Option is a Some
     * @param nont The function to run if the Option is a None
@@ -63,8 +56,9 @@ export interface Option<T> extends Kind, Monad<T>, Applicative<T>, Functor<T>, F
    fold: <U>(func: (acc: U, value: T) => U, initialValue: U) => Option<U>
 }
 
-class Maybe<T> implements Option<T> {
-   private readonly _value: T | undefined = undefined
+/** @internal */
+export class Maybe<T> implements Option<T> {
+   protected readonly _value: T | undefined = undefined
 
    constructor(
       public readonly kind: Kinds,
@@ -122,14 +116,6 @@ class Maybe<T> implements Option<T> {
          return lift<U>(result)
       }
       return none<U>()
-   }
-
-   toResult = (errorMessage: string): Result<T> => {
-      if (!isNullOrUndefined(this._value)) {
-         return success(this._value)
-      } else {
-         return failure(errorMessage)
-      }
    }
 
    filter = (func: (value: T) => boolean): Option<T> => {

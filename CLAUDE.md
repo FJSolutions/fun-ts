@@ -30,12 +30,25 @@ methods: `isSome`/`isNone` guards, `map`, `flatMap`, `match`, `orElse`, `apply`,
 functions: `some`, `none`, `lift` (elevates `A => B | null | undefined` to `Option<A> => Option<B>`), `toResult`
 
 - **`result.ts`** — `Result<T>` monad (`Ok<T> | Failure`). 
-methods `isSuccess`, `isFaulure`, `map`, `flatMap`, `match`, `orElse`, `filter`, `fold`   
-functions: `lift`, `success`, `failure` , `toOption`,
+methods `isSuccess`, `isFailure`, `map`, `flatMap`, `match`, `orElse`, `filter`, `fold`   
+functions: `lift`, `success`, `failure`, `toOption`
 
-- **`sequence.ts`** — Lazy `Seq<T>` iterable sequences. Operations (`map`, `filter`, `flatMap`, `take`/`limit`, `skip`/`offset`, `fold`, `tap`) are lazy until `.toList()` is called. Also has a `pipe` function for composing sequence operations.
+- **`index.ts`** — Lazy `Seq<T>` iterable sequences. Operations (`map`, `filter`, `flatMap`, `take`/`limit`, `skip`/`offset`, `fold`, `tap`) are lazy until `.toList()` is called. Also has a `pipe` function for composing sequence operations.
 
 - **`strings.ts`** — String case conversion utilities: `toPascal`, `toCamel`, `toSnake`, `toKebab`, `capitalise`, `toSentence`, `toUpper`, `toLower`. Relies on `Intl.Segmenter` for word splitting.
+
+- **`numbers.ts`** — Safe string-to-number parsing. Exported as `N` namespace.  
+functions: `toIntOption`, `toFloatOption` (return `Option<number>`), `toIntResult`, `toFloatResult` (return `Result<number>`)
+
+- **`general.ts`** — General-purpose utilities exported at the top level.  
+functions: `id` (identity — returns its argument unchanged), `lazy` (wraps a factory in a cached lazy loader, exposing a `.value` getter)
+
+- **`recursion.ts`** — Safe iterative recursion. Not exported from `index.ts`.  
+function: `recurse(source, accumulator, predicate, processor, config?)` — loops `processor` until `predicate` returns false, throwing `RecursionError` if `depth` (default 100) is exceeded.  
+types: `RecursionConfiguration`, `RecursionState<T, R>`
+
+- **`types.ts`** — Shared functional interfaces used internally across modules. Not exported from `index.ts`.  
+types: `Kind`, `Kinds`, `Functor<T>`, `Applicative<T>`, `Monad<T>`, `Predicate<T>`, `Filterable<T>`, `Foldable<T>`
 
 - **`utils.ts`** — Internal helpers: `isNullOrUndefined`, `toWordList`, `toIdentifierWordList`.
 

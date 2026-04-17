@@ -1,6 +1,5 @@
-import type { Filterable, Foldable, Functor, Kind, Kinds, Monad } from "./types";
-import { none, type Option, some } from "./option";
-import { isNullOrUndefined } from "./utils";
+import type { Filterable, Foldable, Functor, Kind, Kinds, Monad } from "../types";
+import { isNullOrUndefined } from "../utils";
 
 type ResultTypes = "Success" | "Failure";
 
@@ -27,10 +26,6 @@ export interface Result<T> extends Kind, Functor<T>, Monad<T>, Filterable<T>, Fo
     */
    orElse: (defaultValue: T) => T
    /**
-    * Transforms this Result into an Option
-    */
-   toOption: () => Option<T>
-   /**
     * Maps the value of Result to another Result
     */
    map: <U>(func: (value: T) => U) => Result<U>
@@ -56,10 +51,11 @@ export interface Result<T> extends Kind, Functor<T>, Monad<T>, Filterable<T>, Fo
    fold: <U>(func: (acc: U, value: T) => U, initialValue: U) => Result<U>
 }
 
-class Either<T> implements Result<T> {
-   private readonly _value: T | undefined = undefined
-   private readonly _errorMessage: string | undefined
-   private readonly _error: Error | undefined
+/** @internal */
+export class Either<T> implements Result<T> {
+   protected readonly _value: T | undefined = undefined
+   protected readonly _errorMessage: string | undefined
+   protected readonly _error: Error | undefined
 
    constructor(
       public readonly kind: Kinds,
@@ -88,14 +84,6 @@ class Either<T> implements Result<T> {
 
    get isSuccess(): boolean {
       return (this.tag === "Success")
-   }
-
-   toOption(): Option<T> {
-      if (!isNullOrUndefined(this._value)) {
-         return some(this._value)
-      } else {
-         return none<T>()
-      }
    }
 
    flatMap<U>(func: (value: T) => Result<U>): Result<U> {

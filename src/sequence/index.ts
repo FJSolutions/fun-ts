@@ -1,8 +1,7 @@
 // NOTE: The current implementations are synchronous and lazy; an asynchronous version could also be created
 
-
-import type { Filterable, Foldable, Functor, Kind, Kinds, Monad, Predicate } from "./types";
-import { lazy } from "./general";
+import type { Filterable, Foldable, Functor, Kind, Kinds, Monad, Predicate } from "../types";
+import { lazy } from "../general";
 
 /**
  * The interface of a lazy sequence of items
@@ -15,7 +14,7 @@ export interface Seq<T> extends Kind, Iterable<T>, Functor<T>, Monad<T>, Filtera
     */
    readonly isEmpty: boolean;
    /**
-    * Returns this Sequence as a realised list
+    * Returns this Index as a realised list
     */
    toList: () => T[]
    /**
@@ -37,12 +36,12 @@ export interface Seq<T> extends Kind, Iterable<T>, Functor<T>, Monad<T>, Filtera
     */
    fold: <U>(func: (acc: U, value: T) => U, initialValue: U) => U
    /**
-    * Only takes a maximum number of items from the Sequence specified by Count
+    * Only takes a maximum number of items from the Index specified by Count
     * @param count The maximum number of items to take
     */
    take: (count: number) => Seq<T>
    /**
-    * Returns a Sequence with the first items skipped
+    * Returns a Index with the first items skipped
     * @param count The number of items to skip
     */
    skip: (count: number) => Seq<T>
@@ -53,7 +52,7 @@ export interface Seq<T> extends Kind, Iterable<T>, Functor<T>, Monad<T>, Filtera
 }
 
 
-class Sequence<T> implements Seq<T> {
+class Index<T> implements Seq<T> {
    constructor(
       readonly kind: Kinds,
       private readonly value: Iterable<T>) {
@@ -162,4 +161,4 @@ class Sequence<T> implements Seq<T> {
  * Creates a Sequence
  * @param source
  */
-export const from = <T>(source: Iterable<T>): Seq<T> => new Sequence("Seq", source)
+export const from = <T>(source: Iterable<T>): Seq<T> => new Index("Seq", source)

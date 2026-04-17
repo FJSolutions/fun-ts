@@ -95,20 +95,6 @@ describe("Result", () => {
       })
    })
 
-   describe("toOption", () => {
-      it("should convert a success to a Some option", () => {
-         const opt = success(42).toOption()
-         expect(opt.isSome).toBeTruthy()
-         expect(opt.orElse(-1)).toBe(42)
-      })
-
-      it("should convert a failure to a None option", () => {
-         const opt = failure<number>("oops").toOption()
-         expect(opt.isNone).toBeTruthy()
-         expect(opt.orElse(-1)).toBe(-1)
-      })
-   })
-
    describe("map", () => {
       it("should transform the value of a success", () => {
          const r = success(21).map(x => x * 2)
