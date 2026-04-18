@@ -1,7 +1,7 @@
 // NOTE: The current implementations are synchronous and lazy; an asynchronous version could also be created
 
 import type { Filterable, Foldable, Functor, Kind, Kinds, Monad, Predicate } from "../types";
-import { lazy } from "../general";
+import { lazy } from "../../general";
 
 /**
  * The interface of a lazy sequence of items
@@ -58,7 +58,6 @@ class Index<T> implements Seq<T> {
       private readonly value: Iterable<T>) {
    }
 
-   // [Symbol.iterator] = () => this.value[Symbol.iterator]()
    * [Symbol.iterator](): IterableIterator<T> {
       const it = this.value[Symbol.iterator]()
 

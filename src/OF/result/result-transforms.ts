@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from "../utils";
+import { isNullOrUndefined } from "../../utils";
 import { none, some, type Option } from "../option";
 import { Either } from "./index";
 

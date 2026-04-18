@@ -21,19 +21,14 @@ pnpm test tests/sequence.tests.ts
 
 **fun-ts** is a personal functional programming library. All public APIs are re-exported from `src/index.ts`.
 
-### Modules
+The library is being developed in two parallel implementation styles, housed in separate top-level folders under `src/`:
+
+- **`src/OF/`** — Object/Functional style. The original implementation: class-based smart objects with chainable functional methods. Exported as the `OF` namespace (`OF.O`, `OF.Seq`, `OF.R`).
+- **`src/FP/`** — Functional/Plain style. Work in progress: the same types reimplemented using thin plain object literals and standalone functions, with no class instances.
+
+### Top-level modules
 
 - **`pipe.ts`** — Top-level `pipe(value, ...fns)` for function composition. Has 9 overload signatures for type-safe chaining up to 9 transforms.
-
-- **`option.ts`** — `Option<T>` monad (`Some<T> | None<T>`). 
-methods: `isSome`/`isNone` guards, `map`, `flatMap`, `match`, `orElse`, `apply`, `filter`, `fold`   
-functions: `some`, `none`, `lift` (elevates `A => B | null | undefined` to `Option<A> => Option<B>`), `toResult`
-
-- **`result.ts`** — `Result<T>` monad (`Ok<T> | Failure`). 
-methods `isSuccess`, `isFailure`, `map`, `flatMap`, `match`, `orElse`, `filter`, `fold`   
-functions: `lift`, `success`, `failure`, `toOption`
-
-- **`index.ts`** — Lazy `Seq<T>` iterable sequences. Operations (`map`, `filter`, `flatMap`, `take`/`limit`, `skip`/`offset`, `fold`, `tap`) are lazy until `.toList()` is called. Also has a `pipe` function for composing sequence operations.
 
 - **`strings.ts`** — String case conversion utilities: `toPascal`, `toCamel`, `toSnake`, `toKebab`, `capitalise`, `toSentence`, `toUpper`, `toLower`. Relies on `Intl.Segmenter` for word splitting.
 
@@ -47,14 +42,35 @@ functions: `id` (identity — returns its argument unchanged), `lazy` (wraps a f
 function: `recurse(source, accumulator, predicate, processor, config?)` — loops `processor` until `predicate` returns false, throwing `RecursionError` if `depth` (default 100) is exceeded.  
 types: `RecursionConfiguration`, `RecursionState<T, R>`
 
-- **`types.ts`** — Shared functional interfaces used internally across modules. Not exported from `index.ts`.  
+- **`utils.ts`** — Internal helpers: `isNullOrUndefined`, `toWordList`, `toIdentifierWordList`.
+
+### `src/OF/` — Object/Functional modules
+
+- **`OF/option/`** — `Option<T>` monad (`Some<T> | None<T>`).  
+methods: `isSome`/`isNone` guards, `map`, `flatMap`, `match`, `orElse`, `apply`, `filter`, `fold`  
+functions: `some`, `none`, `lift` (elevates `A => B | null | undefined` to `Option<A> => Option<B>`), `toResult`
+
+- **`OF/result/`** — `Result<T>` monad (`Ok<T> | Failure`).  
+methods: `isSuccess`, `isFailure`, `map`, `flatMap`, `match`, `orElse`, `filter`, `fold`  
+functions: `lift`, `success`, `failure`, `toOption`
+
+- **`OF/sequence/`** — Lazy `Seq<T>` iterable sequences. Operations (`map`, `filter`, `flatMap`, `take`/`limit`, `skip`/`offset`, `fold`, `tap`) are lazy until `.toList()` is called. Also has a `pipe` function for composing sequence operations.
+
+- **`OF/types.ts`** — Shared functional interfaces used internally across OF modules.  
 types: `Kind`, `Kinds`, `Functor<T>`, `Applicative<T>`, `Monad<T>`, `Predicate<T>`, `Filterable<T>`, `Foldable<T>`
 
-- **`utils.ts`** — Internal helpers: `isNullOrUndefined`, `toWordList`, `toIdentifierWordList`.
+### `src/FP/` — Functional/Plain modules (in progress)
+
+- **`FP/option.ts`** — `Option<T>` as a plain object literal (`{ kind, type, value? }`).  
+functions: `some`, `none`
+
+- **`FP/types.ts`** — Shared type definitions for the FP style.  
+types: `Kind`, `Option<T>`
 
 ### Key Patterns
 
-- **Chaining** - chainable instance methods on classes implementing functional interfaces
+- **OF style** — chainable instance methods on classes implementing functional interfaces
+- **FP style** — thin plain object literals; all operations are standalone functions
 - **Arrow functions only** — limited `function` declarations.
 - **Lazy sequences** — `Seq<T>` operations build an iterator chain; nothing is evaluated until `.toList()` or iteration.
 - **9-arity pipe overloads** — `pipe` and the module-level `pipe` helpers on `option` and `sequence` are all overloaded up to 9 parameters for strong type inference.

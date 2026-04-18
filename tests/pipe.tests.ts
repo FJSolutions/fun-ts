@@ -3,9 +3,9 @@ import { id } from "../src"
 import * as N from "../src/numbers"
 import * as P from "../src/pipe"
 
-describe("Do", () => {
+describe("accumulate", () => {
    test("returns a value from a single bind", () => {
-      const result = P.accumulator()
+      const result = P.accumulate()
          .bind("a", () => 42)
          .return(({a}) => a)
 
@@ -13,7 +13,7 @@ describe("Do", () => {
    })
 
    test("later binds can reference earlier ones", () => {
-      const result = P.accumulator()
+      const result = P.accumulate()
          .bind("a", () => 10)
          .bind("b", ({a}) => a + 5)
          .return(({a, b}) => a + b)
@@ -22,7 +22,7 @@ describe("Do", () => {
    })
 
    test("handles heterogeneous types", () => {
-      const result = P.accumulator()
+      const result = P.accumulate()
          .bind("n", () => 42)
          .bind("s", () => "hello")
          .return(({n, s}) => `${s} ${n}`)
@@ -30,14 +30,14 @@ describe("Do", () => {
       expect(result).toBe("hello 42")
    })
 
-   test("P.Do with an initial context", () => {
-      const result = P.accumulator({initials: "FBJ"})
+   test("P.accumulate with an initial context", () => {
+      const result = P.accumulate({initials: "FBJ"})
          .return(ctx => ctx.initials)
       expect(result).toBe("FBJ")
    })
 
-   test("P.Do with values, Options, and results", () => {
-      const result = P.accumulator()
+   test("P.accumulate with values, Options, and results", () => {
+      const result = P.accumulate()
          .bind("noOpt", _ctx => N.toFloatResult("FBJ"))
          .return(ctx => ctx.noOpt.orElse(-1))
       expect(result).toBe(-1)

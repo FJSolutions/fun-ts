@@ -5,7 +5,9 @@
       "Read(//mnt/d/Projects/Judgeknot/**)",
       "Bash(pnpm test:*)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(npx vitest *)"
     ]
   }
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { from } from "../src/sequence";
+import { from } from "../../src/OF/sequence";
 
 describe("Sequence", () => {
 

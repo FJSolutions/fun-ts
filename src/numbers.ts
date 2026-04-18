@@ -1,6 +1,6 @@
 import { isNullOrUndefined } from "./utils";
-import * as O from "./option";
-import * as R from "./result";
+import * as O from "./OF/option";
+import * as R from "./OF/result";
 
 /**
  * Safe parsing of a string to a decimal integer that returns an `Option` indicating if it was successful

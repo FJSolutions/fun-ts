@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { failure, lift, success } from "../src/result";
+import { failure, lift, success } from "../../src/OF/result";
 
 describe("Result", () => {
 

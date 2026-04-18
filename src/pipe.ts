@@ -167,13 +167,13 @@ export function pipe(
    return funcs.reduce((acc, func) => func(acc), data)
 }
 
-type DoBuilder<Ctx> = {
-   bind: <K extends string, V>(key: K, f: (ctx: Ctx) => V) => DoBuilder<Ctx & Record<K, V>>
+type AccumulateBuilder<Ctx> = {
+   bind: <K extends string, V>(key: K, f: (ctx: Ctx) => V) => AccumulateBuilder<Ctx & Record<K, V>>
    return: <R>(f: (ctx: Ctx) => R) => R
 }
 
-const accumulatorBuilder = <Ctx>(ctx: Ctx): DoBuilder<Ctx> => ({
-   bind: (key, f) => accumulatorBuilder({...ctx, [key as string]: f(ctx)} as any),
+const accumulateBuilder = <Ctx>(ctx: Ctx): AccumulateBuilder<Ctx> => ({
+   bind: (key, f) => accumulateBuilder({...ctx, [key as string]: f(ctx)} as any),
    return: (f) => f(ctx),
 })
 
@@ -181,5 +181,5 @@ const accumulatorBuilder = <Ctx>(ctx: Ctx): DoBuilder<Ctx> => ({
  * Creates a context for chaining together functions, capturing their returned values, and passing the results on into successive functions
  * @param initial (Optional) An object to use as the initial state to pass into the chain of functions.
  */
-export const accumulator = <Ctx extends object = {}>(initial?: Ctx) => accumulatorBuilder(initial ?? {} as Ctx)
+export const accumulate = <Ctx extends object = {}>(initial?: Ctx) => accumulateBuilder(initial ?? {} as Ctx)
 

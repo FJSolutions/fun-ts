@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from "../utils";
+import { isNullOrUndefined } from "../../utils";
 import type { Applicative, Filterable, Foldable, Functor, Kind, Kinds, Monad } from "../types";
 
 type OptionType = "Some" | "None"

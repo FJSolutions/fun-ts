@@ -1,5 +1,5 @@
 import type { Filterable, Foldable, Functor, Kind, Kinds, Monad } from "../types";
-import { isNullOrUndefined } from "../utils";
+import { isNullOrUndefined } from "../../utils";
 
 type ResultTypes = "Success" | "Failure";
 

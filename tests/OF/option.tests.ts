@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { none, lift, some } from "../src/option";
+import { none, lift, some } from "../../src/OF/option";
 
 describe("Option", () => {
    it("Should be able to create a Some Option", () => {
