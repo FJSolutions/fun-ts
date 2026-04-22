@@ -15,7 +15,7 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "build": "tsup",
-    "clean": "node --input-type=module --eval \"import{rmSync}from'fs';rmSync('lib',{recursive:true,force:true})\"",
+    "clean": "bun -e \"import { $ } from 'bun'; await $`rm -rf dist`\"",
     "pub": "bun run build; npm pack --pack-destination /Projects/npm-local/"
   },
   "keywords": [
