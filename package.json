@@ -1,16 +1,18 @@
 {
    "name": "fun-ts",
-   "description": "A personal project grouping the most Functional Programming types & functions I use regularly in one place.",
-   "version": "0.6.0",
+   "description": "A module that groups the common Functional Programming types & functions I use regularly in one place.",
+   "version": "0.7.0",
    "type": "module",
-   "main": "lib/index.js",
-   "types": "lib/index.d.ts",
+   "main": "./dist/index.js",
+   "types": "./dist/index.d.ts",
    "scripts": {
       "test": "vitest",
+      "test:once": "vitest --watch=false",
       "lint": "oxlint",
       "lint:fix": "oxlint --fix",
-      "build": "pnpm clean &&pnpm tsc --project tsconfig.build.json",
-      "clean": "node --input-type=module --eval \"import{rmSync}from'fs';rmSync('lib',{recursive:true,force:true})\""
+      "build": "tsup",
+      "clean": "node --input-type=module --eval \"import{rmSync}from'fs';rmSync('lib',{recursive:true,force:true})\"",
+      "pub": "bun run build; npm pack --pack-destination /Projects/npm-local/"
    },
    "keywords": [
       "Functional",
@@ -21,7 +23,8 @@
    "packageManager": "pnpm@10.27.0",
    "devDependencies": {
       "oxlint": "^1.57.0",
-      "typescript": "^6.0.2",
-      "vitest": "^4.1.1"
+      "typescript": "^5.9.3",
+      "vitest": "^4.1.1",
+      "tsup": "^8.5.1"
    }
 }

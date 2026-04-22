@@ -1,0 +1,12 @@
+.idea/
+.claude/
+tests/
+src/
+
+.gitignore
+.npmignore
+CLAUDE.md
+tsup.config.ts
+tsconfig.build.json
+tsconfig.json
+vitest.config.ts

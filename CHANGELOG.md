@@ -8,11 +8,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-04-22
+
 ### Added
 
 - Added an `FP` (Functional Programming) module and added new 'thin' `Option`,
   `Result` and `Sequence` types with accompanying functions
 - Created a new set of tests in an FP folder to cover the new implementation.
+- A build & publish task: `bun run build` 
 
 ### Changed
 
@@ -20,6 +23,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Object/Functional) module.
 - Moved their tests into a parallel folder
 - Renamed the pipe module's `accumulator` to just `accumulate`
+- Removed the `esbuild` and moved to `tsup`; replaced the `tsconfig.json`
 
 ## [0.6.0] - 2026-04-17
 
