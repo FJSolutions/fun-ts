@@ -1,6 +1,7 @@
 {
   "name": "fun-ts",
   "description": "A module that groups the common Functional Programming types & functions I use regularly in one place.",
+  "author": "Francis Judge <fjudge7@gmail.com>",
   "version": "0.7.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -22,7 +23,6 @@
     "Functional",
     "FP"
   ],
-  "author": "Francis Judge <fjudge7@gmail.com>",
   "license": "MIT",
   "packageManager": "pnpm@10.27.0",
   "devDependencies": {

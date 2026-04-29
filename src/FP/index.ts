@@ -1,5 +1,5 @@
 // import * as UtilsModule from "./utils";
 
-namespace FP {
+export const FP = {
    // export import Utils = UtilsModule;
 }
