@@ -76,3 +76,8 @@ types: `Kind`, `Option<T>`
 - **9-arity pipe overloads** — `pipe` and the module-level `pipe` helpers on `option` and `sequence` are all overloaded up to 9 parameters for strong type inference.
 - **Strict TypeScript** — `strict: true`, `noUncheckedIndexedAccess: true`, `verbatimModuleSyntax: true`. No implicit `any`, no unchecked array access.
 - **No runtime dependencies** — dev-only deps (`vitest`, `oxlint`).
+
+## Other documents
+
+- [Parser Combinators](docs/parser-combinators.md)
+- 

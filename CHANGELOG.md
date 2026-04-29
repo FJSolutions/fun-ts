@@ -8,6 +8,16 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Scaffolded out a basic parser-combinator library
+  - `str`
+  - `regex`
+  - `eol`
+  - `eof`
+  - `sequenceOf`
+- Added tests for them
+
 ## [0.7.0] - 2026-04-22
 
 ### Added

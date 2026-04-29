@@ -27,6 +27,8 @@ export const sequenceOf = (parsers: Parser[]): Parser => (input: ParserState): P
     }
 }
 
+
+
 // TODO: Transformers
 // map(parser, fn)
 
