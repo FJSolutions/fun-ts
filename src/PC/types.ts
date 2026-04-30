@@ -1,18 +1,36 @@
 /**
- * ParserState contains all the state for a Parser to match
+ * Contains state information from a successful parser.
+ * T is the type of the match: string for basic parsers, Success<T>[] for sequenceOf.
  */
-export type ParserState = {
+export type Success<T> = {
+    readonly tag: "success"
     readonly source: string
     readonly index: number
-    readonly line: number
+    readonly lineNumber: number
     readonly lineIndex: number
-    current: () => string
-    match: string
-    readonly isError: boolean
-    readonly reason: string | null
+    readonly current: () => string
+    readonly match: T
 }
 
 /**
- * A parser is a function that transforms one ParserState yto another
+ * Contains information from a failed parser
  */
-export type Parser = (input: ParserState) => ParserState
+export type Failure = {
+    readonly tag: "failure"
+    readonly source: string
+    readonly index: number
+    readonly lineNumber: number
+    readonly lineIndex: number
+    readonly reason: string
+}
+
+/**
+ * The Parser State union
+ */
+export type ParserState<T> = Success<T> | Failure
+
+/**
+ * A Parser transforms a ParserState into a new ParserState.
+ * The input match type is unknown because parsers never read it.
+ */
+export type Parser<T> = (input: ParserState<unknown>) => ParserState<T>

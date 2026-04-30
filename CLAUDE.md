@@ -21,10 +21,11 @@ pnpm test tests/sequence.tests.ts
 
 **fun-ts** is a personal functional programming library. All public APIs are re-exported from `src/index.ts`.
 
-The library is being developed in two parallel implementation styles, housed in separate top-level folders under `src/`:
+The library has three top-level modules under `src/`, each taking a distinct approach:
 
-- **`src/OF/`** — Object/Functional style. The original implementation: class-based smart objects with chainable functional methods. Exported as the `OF` namespace (`OF.O`, `OF.Seq`, `OF.R`).
-- **`src/FP/`** — Functional/Plain style. Work in progress: the same types reimplemented using thin plain object literals and standalone functions, with no class instances.
+- **`src/OF/`** — Object/Functional style. Class-based smart objects with chainable functional methods. Exported as the `OF` namespace (`OF.O`, `OF.Seq`, `OF.R`).
+- **`src/FP/`** — Functional/Plain style. The same domain types (`Option`, `Result`, `Sequence`) reimagined as thin plain object literals with standalone functions and no class instances.
+- **`src/PC/`** — Parser Combinators. A parser-combinator library using the same thin-type-and-function approach as `FP`. Parsers are plain functions `(ParserState) => ParserState`; combinators compose them.
 
 ### Top-level modules
 
@@ -67,10 +68,27 @@ functions: `some`, `none`
 - **`FP/types.ts`** — Shared type definitions for the FP style.  
 types: `Kind`, `Option<T>`
 
+### `src/PC/` — Parser Combinator modules
+
+- **`PC/types.ts`** — Core types.  
+  types: `Success<T>` (`{ tag: "success", source, index, lineNumber, lineIndex, current(), match: T }`), `Failure` (`{ tag: "failure", source, index, lineNumber, lineIndex, reason }`), `ParserState<T>` (`Success<T> | Failure`), `Parser<T>` (`(input: ParserState<unknown>) => ParserState<T>`)
+
+- **`PC/basic-parsers.ts`** — Primitive parsers, all typed as `Parser<string>`.  
+  functions: `str(text)`, `regex(matcher)` (pattern must be anchored with `^`), `eof()`, `whitespace()`, `alphanumeric()`, `integer()`, `float()`, `lineEnding()` (increments `lineNumber`, resets `lineIndex`)
+
+- **`PC/parser-combinators.ts`** — Combinators that compose parsers.  
+  functions: `sequenceOf<T>(parsers)` → `Parser<Success<T>[]>`; `map<A,B>(parser, fn)` → `Parser<B>`; `choice<T>(parsers)` → `Parser<T>` (first match wins, deepest failure); `optional<T>(parser)` → `Parser<T | null>`; `left<A,B>(a, b)` → `Parser<A>`; `right<A,B>(a, b)` → `Parser<B>`; `between<O,T,C>(open, parser, close)` → `Parser<T>`; `sepBy1<T,S>(parser, sep)` → `Parser<T[]>` (one or more); `sepBy<T,S>(parser, sep)` → `Parser<T[]>` (zero or more); `many<T>(parser)` → `Parser<T[]>` (zero or more, always succeeds); `many1<T>(parser)` → `Parser<T[]>` (one or more); `manyTill<T,E>(parser, terminator)` → `Parser<T[]>` (until terminator, which is consumed); `label<T>(parser, name)` (replaces failure reason with `expected <name>`)
+
+- **`PC/function-parsers.ts`** — Runner utilities.  
+  functions: `run<T>(parser, source)` → `ParserState<T>`, `formatError(failure)` (renders a human-readable error with the source line and a caret at the failure column)
+
+- **`PC/index.ts`** — Re-exports everything including types (`export type * from "./types"`).
+
 ### Key Patterns
 
 - **OF style** — chainable instance methods on classes implementing functional interfaces
 - **FP style** — thin plain object literals; all operations are standalone functions
+- **PC style** — same thin-type-and-function approach as FP; parsers are plain `Parser<T>` functions `(ParserState<unknown>) => ParserState<T>`
 - **Arrow functions only** — limited `function` declarations.
 - **Lazy sequences** — `Seq<T>` operations build an iterator chain; nothing is evaluated until `.toList()` or iteration.
 - **9-arity pipe overloads** — `pipe` and the module-level `pipe` helpers on `option` and `sequence` are all overloaded up to 9 parameters for strong type inference.

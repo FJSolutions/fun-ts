@@ -1,132 +1,108 @@
-import type {Parser, ParserState} from "./types";
+import type {Failure, Parser, ParserState, Success} from "./types";
 
-/**
- * Creates a Parser that matches the supplied `text`
- * @param text The string to find
- */
-export const str = (text: string): Parser => (input: ParserState): ParserState => {
-    if (!input.isError) {
-        if (input.index + text.length > input.source.length) {
-            return {
-                ...input,
-                isError: true,
-                reason: "EOF"
-            }
-        }
+const fail = (input: Success<unknown>, reason: string): Failure => ({
+    tag: "failure",
+    source: input.source,
+    index: input.index,
+    lineNumber: input.lineNumber,
+    lineIndex: input.lineIndex,
+    reason,
+})
 
-        if (input.current().startsWith(text)) {
-            return {
-                ...input,
-                match: text,
-                index: input.index + text.length,
-                lineIndex: input.lineIndex + 1,
-            };
-        }
+export const str = (text: string): Parser<string> => (input: ParserState<unknown>): ParserState<string> => {
+    if (input.tag === "failure") return input;
 
+    if (input.index + text.length > input.source.length) {
+        return fail(input, "EOF")
+    }
+
+    if (input.current().startsWith(text)) {
         return {
-            ...input,
-            isError: true,
-            reason: `'${text}' was not found at index ${input.index}`,
+            tag: "success",
+            source: input.source,
+            index: input.index + text.length,
+            lineNumber: input.lineNumber,
+            lineIndex: input.lineIndex + 1,
+            current: input.current,
+            match: text,
         };
     }
 
-    return input;
+    return fail(input, `'${text}' was not found at index ${input.index}`);
 }
 
-/**
- * Creates a regular expression Parser based on the supplied RegExp
- * @param matcher The regular expression instance
- */
-export const regex = (matcher: RegExp): Parser => (input: ParserState): ParserState => {
-    if (!input.isError) {
-        const matches = input.current().match(matcher)
-        if (!matches) {
-            return {
-                ...input,
-                isError: true,
-                reason: `the pattern '/${matcher.source}/' did not match at index ${input.index}`
-            }
-        }
+export const regex = (matcher: RegExp): Parser<string> => (input: ParserState<unknown>): ParserState<string> => {
+    if (input.tag === "failure") return input;
 
-        const match = matches[0]
+    const matches = input.current().match(matcher)
+    if (!matches) {
+        return fail(input, `the pattern '/${matcher.source}/' did not match at index ${input.index}`)
+    }
+
+    const match = matches[0]!
+    return {
+        tag: "success",
+        source: input.source,
+        index: input.index + match.length,
+        lineNumber: input.lineNumber,
+        lineIndex: input.lineIndex + 1,
+        current: input.current,
+        match,
+    }
+}
+
+export const eof = (): Parser<string> => (input: ParserState<unknown>): ParserState<string> => {
+    if (input.tag === "failure") return input;
+
+    if (input.index === input.source.length) {
         return {
-            ...input,
-            match,
-            index: input.index + match.length,
-            lineIndex: input.lineIndex + 1,
+            tag: "success",
+            source: input.source,
+            index: input.index,
+            lineNumber: input.lineNumber,
+            lineIndex: input.lineIndex,
+            current: input.current,
+            match: "",
         }
     }
 
-    return input;
-}
-
-/**
- * Matches the end of the input (EOF)
- */
-export const eof = () => (input: ParserState) => {
-    if (!input.isError) {
-        if (input.index === input.source.length) {
-            return input
-        }
-
-        return {
-            ...input,
-            isError: true,
-            reason: `index ${input.index} is not EOF`
-        }
-    }
-    return input;
+    return fail(input, `index ${input.index} is not EOF`)
 }
 
 const whitespaceMatcher = regex(/^\s+/)
-/**
- * Matches one or more whitespace characters
- */
-export const whitespace = () => {
-    return (input: ParserState): ParserState => whitespaceMatcher(input)
+export const whitespace = (): Parser<string> => {
+    return (input: ParserState<unknown>): ParserState<string> => whitespaceMatcher(input)
 }
 
 const alphaNumericMatcher = regex(/^[a-zA-Z0-9]+/)
-/**
- * Matches letters and digits (but not a dot)
- */
-export const alphanumeric = () => {
-    return (input: ParserState): ParserState => alphaNumericMatcher(input)
+export const alphanumeric = (): Parser<string> => {
+    return (input: ParserState<unknown>): ParserState<string> => alphaNumericMatcher(input)
 }
 
 const integerMatcher = regex(/^\d+/)
-/**
- * Matches integer numbers
- */
-export const integer = () => {
-    return (input: ParserState): ParserState => integerMatcher(input)
+export const integer = (): Parser<string> => {
+    return (input: ParserState<unknown>): ParserState<string> => integerMatcher(input)
 }
 
 const floatMatcher = regex(/^\d+(\.\d+)?/)
-/**
- * Matches decimal numbers
- */
-export const float = () => {
-    return (input: ParserState): ParserState => floatMatcher(input)
+export const float = (): Parser<string> => {
+    return (input: ParserState<unknown>): ParserState<string> => floatMatcher(input)
 }
 
 const eolMatcher = regex(/^[\n\r]{1,2}/)
-/**
- * Matches any end-of-line explicitly
- */
-export const lineEnding = () => {
-    return (input: ParserState): ParserState => {
+export const lineEnding = (): Parser<string> => {
+    return (input: ParserState<unknown>): ParserState<string> => {
         const result = eolMatcher(input)
-        if (result.isError) {
-            return {
-                ...result,
-            }
-        }
+        if (result.tag === "failure") return result;
 
         return {
-            ...result,
-            line: input.line + 1,
+            tag: "success",
+            source: result.source,
+            index: result.index,
+            lineNumber: result.lineNumber + 1,
             lineIndex: 0,
+            current: result.current,
+            match: result.match,
         }
     }
 }

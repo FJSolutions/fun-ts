@@ -18,6 +18,10 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `sequenceOf`
 - Added tests for them
 
+### Changed
+
+- Moved from Bun to PNPM
+
 ## [0.7.0] - 2026-04-22
 
 ### Added
