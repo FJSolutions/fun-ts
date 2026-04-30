@@ -2,7 +2,7 @@
   "name": "fun-ts",
   "description": "A module that groups the common Functional Programming types & functions I use regularly in one place.",
   "author": "Francis Judge <fjudge7@gmail.com>",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

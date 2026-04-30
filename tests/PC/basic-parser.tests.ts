@@ -88,8 +88,8 @@ describe("basic parser", () => {
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
                 expect(result.match).toHaveLength(3)
-                expect(result.match[0]!.match).toBe("Hello World")
-                expect(result.match[2]!.match).toBe("Goodbye World")
+                expect(result.match[0]!).toBe("Hello World")
+                expect(result.match[2]!).toBe("Goodbye World")
             }
         })
 
@@ -119,6 +119,231 @@ describe("basic parser", () => {
             if (result.tag === "success") {
                 expect(result.lineNumber).toBe(2)
                 expect(result.index).toBe(12)
+            }
+        })
+    })
+
+    describe("inlineWhitespace", () => {
+        it("should match a single space", () => {
+            const result = P.run(P.inlineWhitespace(), " hello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe(" ")
+                expect(result.index).toBe(1)
+            }
+        })
+
+        it("should match a tab character", () => {
+            const result = P.run(P.inlineWhitespace(), "\thello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("\t")
+            }
+        })
+
+        it("should match multiple spaces and tabs", () => {
+            const result = P.run(P.inlineWhitespace(), "   \t  hello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("   \t  ")
+                expect(result.index).toBe(6)
+            }
+        })
+
+        it("should stop before a newline", () => {
+            const result = P.run(P.inlineWhitespace(), "  \nhello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("  ")
+                expect(result.index).toBe(2)
+            }
+        })
+
+        it("should not match a newline at the start", () => {
+            const result = P.run(P.inlineWhitespace(), "\nhello")
+            expect(result.tag).toBe("failure")
+        })
+
+        it("should not match a carriage return at the start", () => {
+            const result = P.run(P.inlineWhitespace(), "\rhello")
+            expect(result.tag).toBe("failure")
+        })
+
+        it("should fail when input starts with a non-whitespace character", () => {
+            const result = P.run(P.inlineWhitespace(), "hello")
+            expect(result.tag).toBe("failure")
+        })
+
+        it("should not update lineNumber", () => {
+            const result = P.run(P.inlineWhitespace(), "   hello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.lineNumber).toBe(1)
+            }
+        })
+    })
+
+    describe("whitespace", () => {
+        it("should match a single space", () => {
+            const result = P.run(P.whitespace(), " hello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe(" ")
+                expect(result.index).toBe(1)
+            }
+        })
+
+        it("should match multiple spaces", () => {
+            const result = P.run(P.whitespace(), "   hello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("   ")
+            }
+        })
+
+        it("should match a newline", () => {
+            const result = P.run(P.whitespace(), "\nhello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("\n")
+                expect(result.index).toBe(1)
+            }
+        })
+
+        it("should increment lineNumber when it matches a newline", () => {
+            const result = P.run(P.whitespace(), "\nhello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.lineNumber).toBe(2)
+            }
+        })
+
+        it("should match mixed inline whitespace and newlines", () => {
+            const result = P.run(P.whitespace(), "  \n  hello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("  \n  ")
+                expect(result.index).toBe(5)
+            }
+        })
+
+        it("should count each newline when matching multiple newlines", () => {
+            const result = P.run(P.whitespace(), "\n\n\nhello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.lineNumber).toBe(4)
+            }
+        })
+
+        it("should fail when input starts with a non-whitespace character", () => {
+            const result = P.run(P.whitespace(), "hello")
+            expect(result.tag).toBe("failure")
+        })
+
+        it("should correctly advance lineNumber across spaces, newlines, and tabs", () => {
+            const p = P.sequenceOf([P.str("a"), P.whitespace(), P.str("b")])
+            const result = P.run(p, "a  \n  \n  b")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match[1]!).toBe("  \n  \n  ")
+                expect(result.lineNumber).toBe(3)
+            }
+        })
+    })
+
+    describe("anyChar", () => {
+        it("should match any single character", () => {
+            const result = P.run(P.anyChar(), "hello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("h")
+                expect(result.index).toBe(1)
+            }
+        })
+
+        it("should match a single digit", () => {
+            const result = P.run(P.anyChar(), "42")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("4")
+            }
+        })
+
+        it("should match a punctuation character", () => {
+            const result = P.run(P.anyChar(), "}")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("}")
+            }
+        })
+
+        it("should fail at EOF", () => {
+            const result = P.run(P.anyChar(), "")
+            expect(result.tag).toBe("failure")
+            if (result.tag === "failure") {
+                expect(result.reason).toBe("EOF")
+            }
+        })
+
+        it("should match a LF newline and increment lineNumber", () => {
+            const result = P.run(P.anyChar(), "\nhello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("\n")
+                expect(result.index).toBe(1)
+                expect(result.lineNumber).toBe(2)
+                expect(result.lineIndex).toBe(0)
+            }
+        })
+
+        it("should match a CR newline and increment lineNumber", () => {
+            const result = P.run(P.anyChar(), "\rhello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("\r")
+                expect(result.lineNumber).toBe(2)
+            }
+        })
+
+        it("should match CRLF as a single character and advance index by 2", () => {
+            const result = P.run(P.anyChar(), "\r\nhello")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("\r\n")
+                expect(result.index).toBe(2)
+                expect(result.lineNumber).toBe(2)
+                expect(result.lineIndex).toBe(0)
+            }
+        })
+
+        it("should not increment lineNumber for a regular character", () => {
+            const result = P.run(P.anyChar(), "abc")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.lineNumber).toBe(1)
+            }
+        })
+
+        it("should propagate an existing failure", () => {
+            let called = false
+            const spy = P.map(P.anyChar(), m => { called = true; return m })
+            P.run(P.sequenceOf([P.str("fail"), spy]), "hello")
+            expect(called).toBe(false)
+        })
+
+        it("should compose with manyTill to parse until a terminator", () => {
+            const result = P.run(P.manyTill(P.anyChar(), P.str("}")), "hello}")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toEqual(["h", "e", "l", "l", "o"])
+            }
+        })
+
+        it("should compose with many to collect characters until EOF", () => {
+            const result = P.run(P.many(P.anyChar()), "abc")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toEqual(["a", "b", "c"])
             }
         })
     })

@@ -1,4 +1,5 @@
 import type {Failure, Parser, ParserState, Success} from "./types";
+import {choice, many1, map} from "./parser-combinators";
 
 const fail = (input: Success<unknown>, reason: string): Failure => ({
     tag: "failure",
@@ -69,9 +70,9 @@ export const eof = (): Parser<string> => (input: ParserState<unknown>): ParserSt
     return fail(input, `index ${input.index} is not EOF`)
 }
 
-const whitespaceMatcher = regex(/^\s+/)
-export const whitespace = (): Parser<string> => {
-    return (input: ParserState<unknown>): ParserState<string> => whitespaceMatcher(input)
+const inlineWhitespaceMatcher = regex(/^[^\S\r\n]+/)
+export const inlineWhitespace = (): Parser<string> => {
+    return (input: ParserState<unknown>): ParserState<string> => inlineWhitespaceMatcher(input)
 }
 
 const alphaNumericMatcher = regex(/^[a-zA-Z0-9]+/)
@@ -89,7 +90,7 @@ export const float = (): Parser<string> => {
     return (input: ParserState<unknown>): ParserState<string> => floatMatcher(input)
 }
 
-const eolMatcher = regex(/^[\n\r]{1,2}/)
+const eolMatcher = regex(/^(\r\n|\r|\n)/)
 export const lineEnding = (): Parser<string> => {
     return (input: ParserState<unknown>): ParserState<string> => {
         const result = eolMatcher(input)
@@ -106,3 +107,63 @@ export const lineEnding = (): Parser<string> => {
         }
     }
 }
+
+/**
+ * Matches one or more whitespace characters, including line endings.
+ * Each lineEnding encountered increments lineNumber so that position tracking
+ * remains accurate across multi-line whitespace.
+ */
+export const whitespace = (): Parser<string> =>
+    map(
+        many1(choice([inlineWhitespace(), lineEnding()])),
+        parts => parts.join("")
+    )
+
+/**
+ * Matches any single character. Fails at EOF.
+ * CRLF is treated as one character (advances index by 2).
+ * Line endings increment lineNumber and reset lineIndex, matching lineEnding behaviour.
+ */
+export const anyChar = (): Parser<string> =>
+    (input: ParserState<unknown>): ParserState<string> => {
+        if (input.tag === "failure")
+            return input;
+        if (input.index >= input.source.length)
+            return fail(input, "EOF");
+
+        const cur = input.current();
+
+        if (cur.startsWith("\r\n")) {
+            return {
+                tag: "success",
+                source: input.source,
+                index: input.index + 2,
+                lineNumber: input.lineNumber + 1,
+                lineIndex: 0,
+                current: input.current,
+                match: "\r\n",
+            };
+        }
+
+        if (cur[0] === "\r" || cur[0] === "\n") {
+            return {
+                tag: "success",
+                source: input.source,
+                index: input.index + 1,
+                lineNumber: input.lineNumber + 1,
+                lineIndex: 0,
+                current: input.current,
+                match: cur[0],
+            };
+        }
+
+        return {
+            tag: "success",
+            source: input.source,
+            index: input.index + 1,
+            lineNumber: input.lineNumber,
+            lineIndex: input.lineIndex + 1,
+            current: input.current,
+            match: cur[0]!,
+        };
+    }

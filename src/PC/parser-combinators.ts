@@ -1,21 +1,26 @@
 import type {Failure, Parser, ParserState, Success} from "./types";
 
+type ParsersOf<T extends readonly unknown[]> = { readonly [K in keyof T]: Parser<T[K]> }
+
 /**
- * Runs each parser in order. Returns a Success whose match is a Success<T>[]
- * containing one entry per parser. Returns the first Failure encountered.
+ * Runs each parser in order. Returns a Parser<T> where T is a tuple of each
+ * parser's match type — so parsers with different match types (e.g. Parser<string>
+ * and Parser<string[]>) can be mixed freely. Position tracking (index, lineNumber,
+ * etc.) is carried through each step but only the final position is kept on the
+ * returned Success. Returns the first Failure encountered.
  */
-export const sequenceOf = <T = string>(parsers: Parser<T>[]): Parser<Success<T>[]> =>
-    (input: ParserState<unknown>): ParserState<Success<T>[]> => {
+export const sequenceOf = <T extends readonly unknown[]>(parsers: [...ParsersOf<T>]): Parser<[...T]> =>
+    (input: ParserState<unknown>): ParserState<[...T]> => {
         if (input.tag === "failure") return input;
 
         let state: Success<unknown> = input;
-        const matches: Success<T>[] = []
+        const values: unknown[] = []
 
         for (const p of parsers) {
-            const next = p(state)
+            const next = (p as Parser<unknown>)(state)
             if (next.tag === "failure") return next;
             state = next
-            matches.push(next)
+            values.push(next.match)
         }
 
         return {
@@ -25,7 +30,7 @@ export const sequenceOf = <T = string>(parsers: Parser<T>[]): Parser<Success<T>[
             lineNumber: state.lineNumber,
             lineIndex: state.lineIndex,
             current: state.current,
-            match: matches,
+            match: values as [...T],
         }
     }
 
@@ -79,11 +84,13 @@ export const choice = <T = string>(parsers: Parser<T>[]): Parser<T> =>
     }
 
 /**
- * Wraps a parser so that failure is treated as a successful match of null.
+ * Wraps a parser so that failure is treated as a successful match of "".
  * On failure the input position is unchanged.
+ * For string parsers the return type collapses to Parser<string>;
+ * for other types the failure value is typed as string (the empty string sentinel).
  */
-export const optional = <T>(parser: Parser<T>): Parser<T | null> =>
-    (input: ParserState<unknown>): ParserState<T | null> => {
+export const optional = <T>(parser: Parser<T>): Parser<T | string> =>
+    (input: ParserState<unknown>): ParserState<T | string> => {
         if (input.tag === "failure") return input;
 
         const result = parser(input)
@@ -96,7 +103,7 @@ export const optional = <T>(parser: Parser<T>): Parser<T | null> =>
             lineNumber: input.lineNumber,
             lineIndex: input.lineIndex,
             current: input.current,
-            match: null,
+            match: "",
         }
     }
 
@@ -224,6 +231,16 @@ export const sepBy = <T, S>(parser: Parser<T>, separator: Parser<S>): Parser<T[]
             match: [],
         }
     }
+
+/**
+ * Defers parser construction until the first parse attempt.
+ * Use this to break circular references between mutually recursive parsers:
+ * declare the lazy wrapper before its dependencies, then define the real parser
+ * after all its dependencies are in scope.
+ */
+export const lazy = <T>(getParser: () => Parser<T>): Parser<T> =>
+    (input: ParserState<unknown>): ParserState<T> =>
+        getParser()(input)
 
 /**
  * Replaces the failure reason of a parser with a human-readable name.

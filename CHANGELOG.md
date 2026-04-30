@@ -10,17 +10,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Scaffolded out a basic parser-combinator library
-  - `str`
-  - `regex`
-  - `eol`
-  - `eof`
-  - `sequenceOf`
-- Added tests for them
+- Created a full, basic set of parsers and parser-combinators
+  - Added a suite of tests for them
 
 ### Changed
 
 - Moved from Bun to PNPM
+
+## [0.8.0] - 2026-05-
 
 ## [0.7.0] - 2026-04-22
 

@@ -16,7 +16,7 @@ describe("parser-combinator", () => {
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
                 expect(result.match).toHaveLength(1)
-                expect(result.match[0]!.match).toBe("Hello")
+                expect(result.match[0]!).toBe("Hello")
             }
         })
 
@@ -25,8 +25,8 @@ describe("parser-combinator", () => {
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
                 expect(result.match).toHaveLength(2)
-                expect(result.match[0]!.match).toBe("Hello")
-                expect(result.match[1]!.match).toBe("World")
+                expect(result.match[0]!).toBe("Hello")
+                expect(result.match[1]!).toBe("World")
             }
         })
 
@@ -43,15 +43,15 @@ describe("parser-combinator", () => {
             }
         })
 
-        it("should carry each sub-parser's full state in the match array", () => {
+        it("should return one match value per parser", () => {
             const result = P.run(P.sequenceOf([P.str("Francis is"), P.whitespace(), P.integer()]), "Francis is 42")
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
                 expect(result.match).toHaveLength(3)
-                expect(result.match[0]!.match).toBe("Francis is")
-                expect(result.match[1]!.match).toBe(" ")
-                expect(result.match[2]!.match).toBe("42")
-                expect(result.match[2]!.index).toBe(13)
+                expect(result.match[0]!).toBe("Francis is")
+                expect(result.match[1]!).toBe(" ")
+                expect(result.match[2]!).toBe("42")
+                expect(result.index).toBe(13)
             }
         })
 
@@ -60,8 +60,8 @@ describe("parser-combinator", () => {
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
                 expect(result.match).toHaveLength(2)
-                expect(result.match[0]!.match).toBe("1c620A89")
-                expect(result.match[1]!.match).toBe("-")
+                expect(result.match[0]!).toBe("1c620A89")
+                expect(result.match[1]!).toBe("-")
             }
         })
     })
@@ -102,7 +102,7 @@ describe("parser-combinator", () => {
         it("should compose with sequenceOf to extract a typed value", () => {
             const parser = P.map(
                 P.sequenceOf([P.str("count"), P.whitespace(), P.integer()]),
-                matches => parseInt(matches[2]!.match, 10)
+                matches => parseInt(matches[2]!, 10)
             )
             const result = P.run(parser, "count 42")
             expect(result.tag).toBe("success")
@@ -174,8 +174,8 @@ describe("parser-combinator", () => {
             )
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
-                expect(result.match[1]!.match).toBe("dog")
-                expect(result.match[1]!.index).toBe(7)
+                expect(result.match[1]!).toBe("dog")
+                expect(result.index).toBe(7)
             }
         })
 
@@ -254,7 +254,7 @@ describe("parser-combinator", () => {
             const result = P.run(P.optional(P.str("Hello")), "World Hello")
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
-                expect(result.match).toBeNull()
+                expect(result.match).toBe("")
             }
         })
 
@@ -287,9 +287,9 @@ describe("parser-combinator", () => {
             const result = P.run(parser, "Hello World")
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
-                expect(result.match[0]!.match).toBe("Hello")
-                expect(result.match[1]!.match).toBeNull()
-                expect(result.match[2]!.match).toBe(" World")
+                expect(result.match[0]!).toBe("Hello")
+                expect(result.match[1]!).toBe("")
+                expect(result.match[2]!).toBe(" World")
             }
         })
 
@@ -298,9 +298,9 @@ describe("parser-combinator", () => {
             const result = P.run(parser, "Hello, World")
             expect(result.tag).toBe("success")
             if (result.tag === "success") {
-                expect(result.match[0]!.match).toBe("Hello")
-                expect(result.match[1]!.match).toBe(",")
-                expect(result.match[2]!.match).toBe(" World")
+                expect(result.match[0]!).toBe("Hello")
+                expect(result.match[1]!).toBe(",")
+                expect(result.match[2]!).toBe(" World")
             }
         })
 
@@ -312,13 +312,57 @@ describe("parser-combinator", () => {
         })
 
         it("should compose with map to produce a default value", () => {
-            const withDefault = P.map(P.optional(P.integer()), s => s !== null ? parseInt(s, 10) : 0)
+            const withDefault = P.map(P.optional(P.integer()), s => s !== "" ? parseInt(s, 10) : 0)
             const present = P.run(withDefault, "42")
             const absent  = P.run(withDefault, "no number here")
             expect(present.tag).toBe("success")
             if (present.tag === "success") expect(present.match).toBe(42)
             expect(absent.tag).toBe("success")
             if (absent.tag === "success") expect(absent.match).toBe(0)
+        })
+    })
+
+    describe("lazy", () => {
+        it("should defer parser construction until parse time", () => {
+            let constructed = false
+            const p = P.lazy(() => { constructed = true; return P.str("hello") })
+            expect(constructed).toBe(false)
+            P.run(p, "hello")
+            expect(constructed).toBe(true)
+        })
+
+        it("should succeed when the deferred parser matches", () => {
+            const result = P.run(P.lazy(() => P.str("hello")), "hello world")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match).toBe("hello")
+            }
+        })
+
+        it("should fail when the deferred parser does not match", () => {
+            const result = P.run(P.lazy(() => P.str("hello")), "world")
+            expect(result.tag).toBe("failure")
+        })
+
+        it("should propagate an existing failure without calling the factory", () => {
+            let called = false
+            const p = P.lazy(() => { called = true; return P.str("x") })
+            P.run(P.sequenceOf([P.str("fail"), p]), "hello")
+            expect(called).toBe(false)
+        })
+
+        it("should enable mutually recursive parsers", () => {
+            // Parses nested brackets: (), (()), ((())), ...
+            const inner: P.Parser<string> = P.lazy(() => nested)
+            const nested: P.Parser<string> = P.map(
+                P.sequenceOf([P.str("("), P.many(inner), P.str(")")]),
+                ([_open, inners, _close]) => `(${inners.join("")})`
+            )
+            expect(P.run(nested, "()").tag).toBe("success")
+            expect(P.run(nested, "(())").tag).toBe("success")
+            expect(P.run(nested, "((()))").tag).toBe("success")
+            const deep = P.run(nested, "((()))")
+            if (deep.tag === "success") expect(deep.match).toBe("((()))")
         })
     })
 })

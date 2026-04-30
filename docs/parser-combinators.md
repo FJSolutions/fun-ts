@@ -38,7 +38,7 @@ type Failure = {
 ```ts
 type ParserState<T> = Success<T> | Failure
 
-// Parsers never read input.match, so the input type is ParserState<unknown>
+// JSON Parser never read input.match, so the input type is ParserState<unknown>
 type Parser<T> = (input: ParserState<unknown>) => ParserState<T>
 ```
 
@@ -97,9 +97,18 @@ Matches a `RegExp` at the current position. **The pattern must be anchored with 
 
 Matches end of input (`index === source.length`). Returns `match: ""` on success.
 
+### `inlineWhitespace()`
+
+Matches one or more whitespace characters that are **not** line endings — spaces, tabs, etc. (`/^[^\S\r\n]+/`). Does not advance `lineNumber`.
+
 ### `whitespace()`
 
-Matches one or more whitespace characters (`/^\s+/`).
+Matches one or more whitespace characters, including line endings. Implemented as `many1(choice([inlineWhitespace(), lineEnding()]))`, so each `\n` / `\r` / `\r\n` encountered increments `lineNumber` exactly once and resets `lineIndex`. The match is the full whitespace string.
+
+```ts
+run(whitespace(), "  \n  hello")
+// match: "  \n  ", index: 5, lineNumber: 2
+```
 
 ### `alphanumeric()`
 
@@ -115,24 +124,21 @@ Matches a decimal number, optionally with a fractional part (`/^\d+(\.\d+)?/`).
 
 ### `lineEnding()`
 
-Matches `\n`, `\r`, or `\r\n`. On success, increments `lineNumber` and resets `lineIndex` to `0`.
+Matches a single line ending — `\r\n` (CRLF), `\r` (CR), or `\n` (LF) — in that priority order (`/^(\r\n|\r|\n)/`). On success, increments `lineNumber` by 1 and resets `lineIndex` to `0`. Each newline is always its own token; consecutive newlines are each matched individually.
 
 ## Combinators
 
 ### `sequenceOf<T>(parsers)`
 
-Runs a homogeneous list of `Parser<T>` in order. Returns `Parser<Success<T>[]>` — one `Success<T>` entry per parser, preserving each sub-parser's full state. Returns the first `Failure` encountered.
+Runs a homogeneous list of `Parser<T>` in order. Returns `Parser<T[]>` — one match value per parser. Position tracking advances through each parser but only the final position is kept on the returned `Success`. Returns the first `Failure` encountered.
 
 ```ts
 import { run, sequenceOf, str, whitespace, integer } from "./PC"
 
 const result = run(sequenceOf([str("count"), whitespace(), integer()]), "count 42")
-// result.tag          === "success"
-// result.match        is Success<string>[]
-// result.match[0].match === "count"
-// result.match[1].match === " "
-// result.match[2].match === "42"
-// result.index        === 8
+// result.tag       === "success"
+// result.match     === ["count", " ", "42"]   (type: string[])
+// result.index     === 8
 ```
 
 ### `map<A, B>(parser, fn)`
@@ -179,18 +185,20 @@ const bool = map(choice([str("true"), str("false")]), s => s === "true")
 
 ### `optional<T>(parser)`
 
-Wraps a `Parser<T>` so that failure becomes `Success<null>` at the original position. Never fails. Returns `Parser<T | null>`.
+Wraps a `Parser<T>` so that failure becomes `Success<"">` (empty string match) at the original position. Never fails. Returns `Parser<T | string>`.
+
+For string parsers `T | string` collapses to `Parser<string>`, so `optional` composes cleanly without introducing `| null` into the type. For non-string parsers, the empty string acts as the sentinel for "not present".
 
 ```ts
 import { run, optional, sequenceOf, str } from "./PC"
 
-// With optional content absent
+// With optional content absent — match is ""
 run(
     sequenceOf([str("Hello"), optional(str(",")), str(" World")]),
     "Hello World"
-).match[1]!.match   // null
+).match[1]!.match   // ""
 
-// With optional content present
+// With optional content present — match is the actual match
 run(
     sequenceOf([str("Hello"), optional(str(",")), str(" World")]),
     "Hello, World"
@@ -200,7 +208,7 @@ run(
 Composes with `map` to supply a default value:
 
 ```ts
-const withDefault = map(optional(integer()), s => s !== null ? parseInt(s, 10) : 0)
+const withDefault = map(optional(integer()), s => s !== "" ? parseInt(s, 10) : 0)
 // Parser<number> — always succeeds
 ```
 
