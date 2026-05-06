@@ -46,18 +46,21 @@ const member = map(
 
 const objectParser = map(
     sequenceOf([
+        discardWhitespace,
         str("{"),
         discardWhitespace,
         map(sepBy(member, str(",")), arr => arr.join(",")),
         discardWhitespace,
         map(optional(str(",")), _ => ""),
-        str("}")
+        str("}"),
+        discardWhitespace,
     ]),
     arr => arr.join("")
 )
 
 const arrayParser = map(
     sequenceOf([
+        discardWhitespace,
         str("["),
         discardWhitespace,
         map(
@@ -70,7 +73,8 @@ const arrayParser = map(
         discardWhitespace,
         map(optional(str(",")), _ => ""),
         discardWhitespace,
-        str("]")
+        str("]"),
+        discardWhitespace,
     ]),
     arr => arr.join("")
 )
@@ -78,6 +82,7 @@ const arrayParser = map(
 // Full implementation referenced by the lazy valueParser above
 const _valueParser: Parser<string> = choice([
     objectParser,
+    arrayParser,
     arrayParser,
     float(),
     string,

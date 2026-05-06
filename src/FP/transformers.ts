@@ -1,7 +1,6 @@
 import type { Option, Result, Seq } from "./types";
 import * as O from "./option";
 import * as R from "./result";
-import * as S from "./sequence"
 
 export const toResult = <T, E>(option: Option<T>, error: any): Result<T, E> => {
    if (O.isSome(option)) {

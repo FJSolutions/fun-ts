@@ -64,6 +64,27 @@ describe("parser-combinator", () => {
                 expect(result.match[1]!).toBe("-")
             }
         })
+
+        it("should track lineNumber across line endings in the sequence", () => {
+            const p = P.sequenceOf([P.str("Hello"), P.lineEnding(), P.str("World")])
+            const result = P.run(p, "Hello\nWorld")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.lineNumber).toBe(2)
+                expect(result.index).toBe(11)
+            }
+        })
+
+        it("should accept a many parser alongside string parsers", () => {
+            const p = P.sequenceOf([P.str("x"), P.many(P.str("a")), P.str("z")])
+            const result = P.run(p, "xaaaz")
+            expect(result.tag).toBe("success")
+            if (result.tag === "success") {
+                expect(result.match[0]!).toBe("x")
+                expect(result.match[1]!).toEqual(["a", "a", "a"])
+                expect(result.match[2]!).toBe("z")
+            }
+        })
     })
 
     describe("map", () => {

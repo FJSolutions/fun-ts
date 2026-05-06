@@ -8,16 +8,43 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### TODO
+
+- Move the `numbers` file to the `OF` module and reimplement it for the `FP` module
+- PC (Parser Combinators):
+  - Investigate a 'pub/sub' type callback mechanism for externally creating an `object`
+  - Create a TOML parser using the same mechanism as for JSON.
+- DU (Discriminated Union): 
+  - Mechanism for adding implementations of common methods (`map`, `filter`, `reduce`, etc.)
+- Edit and complete the README.md files for the different modules.
+- Build a documentation website.
+
+## [0.8.2] - 2026-05-02
+
+### Added
+
+- Restructured and added new Readme documentation.
+
+## [0.8.1] - 2026-05-02
+
+### Changed 
+
+- Publishing cleanup.
+  - Changed the package 'name' to `@judgeknot/fun-ts`  
+
+## [0.8.0] - 2026-05-02
+
 ### Added
 
 - Created a full, basic set of parsers and parser-combinators
   - Added a suite of tests for them
+- A Discriminated Union (DU) module for creating Sum types.
 
 ### Changed
 
 - Moved from Bun to PNPM
-
-## [0.8.0] - 2026-05-
+- Name is now `@judgeknot/fun-ts`
+- Published publicly
 
 ## [0.7.0] - 2026-04-22
 

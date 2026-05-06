@@ -1,12 +1,12 @@
 .idea/
 .claude/
-tests/
+docs/
 src/
+tests/
 
 .gitignore
 .npmignore
 CLAUDE.md
-tsup.config.ts
-tsconfig.build.json
 tsconfig.json
+tsup.config.ts
 vitest.config.ts

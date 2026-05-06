@@ -1,14 +1,14 @@
 {
-  "name": "fun-ts",
-  "description": "A module that groups the common Functional Programming types & functions I use regularly in one place.",
+  "name": "@judgeknot/fun-ts",
+  "description": "A module that contains many common Functional Programming types & functions",
   "author": "Francis Judge <fjudge7@gmail.com>",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/FJSolutions/fun-ts"
+    "url": "git+https://github.com/FJSolutions/fun-ts.git"
   },
   "scripts": {
     "test": "vitest",
@@ -16,19 +16,19 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "build": "tsup",
-    "clean": "bun -e \"import { $ } from 'bun'; await $`rm -rf dist`\"",
-    "pub": "bun run build; npm pack --pack-destination /Projects/npm-local/"
+    "clean": "pnpm dlx rimraf dist",
+    "pub:local": "bun run build; npm pack --pack-destination /Projects/npm-local/"
   },
   "keywords": [
     "Functional",
     "FP"
   ],
   "license": "MIT",
-  "packageManager": "pnpm@10.27.0",
   "devDependencies": {
     "oxlint": "^1.57.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.1",
     "tsup": "^8.5.1"
-  }
+  },
+  "packageManager": "pnpm@10.27.0"
 }
