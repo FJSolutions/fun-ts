@@ -10,20 +10,25 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### TODO
 
-- Move the `numbers` file to the `OF` module and reimplement it for the `FP` module
 - PC (Parser Combinators):
   - Investigate a 'pub/sub' type callback mechanism for externally creating an `object`
   - Create a TOML parser using the same mechanism as for JSON.
 - DU (Discriminated Union): 
   - Mechanism for adding implementations of common methods (`map`, `filter`, `reduce`, etc.)
+  - Investigate whether using a series of `Symbol`s could be used as the basis for functions.   
 - Edit and complete the README.md files for the different modules.
 - Build a documentation website.
 
-## [0.8.2] - 2026-05-02
+## [0.8.3] - 2026-05-07
 
 ### Added
 
 - Restructured and added new Readme documentation.
+
+### Changed
+
+- Move the `numbers` file to the `OF` module and added an new one for the `FP` module.
+  - Updated the tests.
 
 ## [0.8.1] - 2026-05-02
 

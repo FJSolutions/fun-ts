@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest"
 import { id } from "../src"
-import * as N from "../src/numbers"
+import * as N from "../src/OF/numbers"
 import * as P from "../src/pipe"
 
 describe("accumulate", () => {

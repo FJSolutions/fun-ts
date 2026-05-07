@@ -1,5 +1,5 @@
-// import * as UtilsModule from "./utils";
+import * as Numbers from "./numbers"
 
 export const FP = {
-   // export import Utils = UtilsModule;
+   N: Numbers
 }

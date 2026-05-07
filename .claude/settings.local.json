@@ -8,7 +8,8 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(echo \"EXIT: $?\")",
       "Bash(npx vitest *)",
-      "PowerShell(pnpm test *)"
+      "PowerShell(pnpm test *)",
+      "Bash(Remove-Item *)"
     ]
   }
 }
