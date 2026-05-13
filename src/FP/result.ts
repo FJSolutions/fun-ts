@@ -5,14 +5,14 @@ export const success = <T>(value: T): Success<T> => ({
    kind: "Result",
    type: "Success",
    value,
-})
+} as const)
 
 export const failure = <E = undefined>(message: string, error?: E): Failure<E> => ({
    kind: "Result",
    type: "Failure",
    message,
    error: error as E,
-})
+} as const)
 
 export const isSuccess = <T, E>(result: Result<T, E>): result is Success<T> =>
    result.kind === "Result" && result.type === "Success" && !isNullOrUndefined((result as Success<T>).value)

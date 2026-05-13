@@ -5,12 +5,12 @@ export const some = <T>(value: T): Option<T> => ({
    kind: "Option",
    type: "Some",
    value: value,
-}) as Option<T>
+} as const) as Option<T>
 
 export const none = <T>(): Option<T> => ({
    kind: "Option",
    type: "None",
-})
+} as const)
 
 export const isSome = <T>(option: Option<T>): option is Some<T> =>
    option.kind === "Option" && option.type === "Some" && !isNullOrUndefined(option.value);

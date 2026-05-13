@@ -21,7 +21,7 @@ export function makeDiscriminatedUnion<Spec extends VariantSpec>(spec: Spec): DU
             tag,
             Object.keys(data).length === 0
                 ? Object.freeze({_tag: tag})
-                : (d: object) => ({_tag: tag, ...d}),
+                : (d: object) => ({_tag: tag, ...d}) as const,
         ])
     )
 

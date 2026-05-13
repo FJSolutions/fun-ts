@@ -6,18 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### TODO
+## TODO
 
 - PC (Parser Combinators):
-  - Investigate a 'pub/sub' type callback mechanism for externally creating an `object`
-  - Create a TOML parser using the same mechanism as for JSON.
-- DU (Discriminated Union): 
-  - Mechanism for adding implementations of common methods (`map`, `filter`, `reduce`, etc.)
-  - Investigate whether using a series of `Symbol`s could be used as the basis for functions.   
+	- Investigate a 'pub/sub' type callback mechanism for externally creating an `object`
+	- Create a TOML parser using the same mechanism as for JSON.
+- DU (Discriminated Union):
+	- Mechanism for adding implementations of common methods (`map`, `filter`, `reduce`, etc.)
+	- Investigate whether using a series of `Symbol`s could be used as the basis for functions.
 - Edit and complete the README.md files for the different modules.
 - Build a documentation website.
+
+## [Unreleased]
+
+## [0.8.4] - 2026-05-13
+
+### Changed
+
+- Made all the return types of option, Result, and the Discriminated Unions `as const` to ensure type narrowing and
+  readonly members.
 
 ## [0.8.3] - 2026-05-07
 
@@ -28,21 +35,21 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Move the `numbers` file to the `OF` module and added an new one for the `FP` module.
-  - Updated the tests.
+	- Updated the tests.
 
 ## [0.8.1] - 2026-05-02
 
-### Changed 
+### Changed
 
 - Publishing cleanup.
-  - Changed the package 'name' to `@judgeknot/fun-ts`  
+	- Changed the package 'name' to `@judgeknot/fun-ts`
 
 ## [0.8.0] - 2026-05-02
 
 ### Added
 
 - Created a full, basic set of parsers and parser-combinators
-  - Added a suite of tests for them
+	- Added a suite of tests for them
 - A Discriminated Union (DU) module for creating Sum types.
 
 ### Changed
@@ -58,7 +65,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added an `FP` (Functional Programming) module and added new 'thin' `Option`,
   `Result` and `Sequence` types with accompanying functions
 - Created a new set of tests in an FP folder to cover the new implementation.
-- A build & publish task: `bun run build` 
+- A build & publish task: `bun run build`
 
 ### Changed
 
@@ -128,34 +135,34 @@ implementation.
 ### Added
 
 - General
-   - `id`
+	- `id`
 - Pipe
-   - Generic, strongly typed, function piping function (1 to 9 function
-     parameters)
+	- Generic, strongly typed, function piping function (1 to 9 function
+	  parameters)
 - Sequence
-   - `Seq` interface
-   - `map`, `filter`, `reduce`, `flatMap`, `take`/`limit`, `skip`/`offset`
-     functions
+	- `Seq` interface
+	- `map`, `filter`, `reduce`, `flatMap`, `take`/`limit`, `skip`/`offset`
+	  functions
 - Option
-   - `Option` interface
-   - `of`, `some`, `none`, `isSome`, `isNone`, `orElse`, `lift`, `match` utility
-     functions
-   - `match` & `pipe` functions
+	- `Option` interface
+	- `of`, `some`, `none`, `isSome`, `isNone`, `orElse`, `lift`, `match` utility
+	  functions
+	- `match` & `pipe` functions
 - Result
-   - `Result` interface
-   - `of`, `ok`, `failure`, `isOk`, `isFailure`, `orElse`, `lift`, `match`
-     utility functions
-   - `match` & `pipe` functions
+	- `Result` interface
+	- `of`, `ok`, `failure`, `isOk`, `isFailure`, `orElse`, `lift`, `match`
+	  utility functions
+	- `match` & `pipe` functions
 - Strings
-   - Case conversion methods
-      - `toUpper`
-      - `toLower`
-      - `capitalise`
-      - `toSentence`
-      - `toPascal`
-      - `toCamel`
-      - `toKebab`
-      - `toSnake`
+	- Case conversion methods
+		- `toUpper`
+		- `toLower`
+		- `capitalise`
+		- `toSentence`
+		- `toPascal`
+		- `toCamel`
+		- `toKebab`
+		- `toSnake`
 
 ### Changed
 
